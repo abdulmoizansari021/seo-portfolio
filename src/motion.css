@@ -1,7 +1,7 @@
-/* Midnight Navy surfaces and motion. Transforms and opacity only, so nothing shifts layout.
+/* Modern Emerald surfaces and motion. Transforms and opacity only, so nothing shifts layout.
    Content is fully visible without JavaScript; reveals are gated on the .js class. */
 
-/* navy header */
+/* dark header */
 .site-head { background: color-mix(in srgb, var(--hero) 94%, transparent); border-bottom-color: color-mix(in srgb, var(--hero-ink) 12%, transparent); }
 .site-head .logo { color: var(--hero-ink); }
 .site-head .logo span { color: var(--hero-muted); }
@@ -47,6 +47,13 @@
 .L-net circle:nth-child(3n+1) { animation-delay: -2.6s; }
 @keyframes fx-pulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.7); opacity: .35; } }
 
+/* growth bars (Modern Emerald) */
+.L-bars { display: flex; align-items: flex-end; gap: 3%; position: absolute; inset: auto 6% 0 auto; width: 42%; height: 72%; }
+.L-bars i { flex: 1; height: var(--h); border-radius: 6px 6px 0 0; background: linear-gradient(to top, color-mix(in srgb, var(--hero-accent) 8%, transparent), color-mix(in srgb, var(--hero-accent) 34%, transparent)); transform-origin: bottom; animation: fx-bar-rise 1.1s cubic-bezier(.2, .7, .2, 1) both, fx-breathe calc(6s * var(--spd)) ease-in-out infinite; animation-delay: calc(var(--i) * 90ms), calc(1.2s + var(--i) * 300ms); }
+@keyframes fx-bar-rise { from { transform: scaleY(.1); } to { transform: scaleY(1); } }
+@keyframes fx-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(.93); } }
+@media (max-width: 760px) { .L-bars { width: 70%; opacity: .5; } }
+
 .L-graph svg { position: absolute; right: 2%; bottom: 10%; width: 44%; max-width: 520px; height: auto; overflow: visible; }
 .L-graph .area { fill: color-mix(in srgb, var(--hero-accent) 10%, transparent); }
 .L-graph .draw { fill: none; stroke: var(--hero-accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
@@ -80,7 +87,7 @@
 .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px color-mix(in srgb, var(--brand) 28%, transparent); }
 .btn-hero:hover { box-shadow: 0 8px 26px color-mix(in srgb, var(--hero-accent) 45%, transparent); }
 .stat { transition: translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s, opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
-.stat:hover { translate: 0 -4px; box-shadow: 0 14px 34px rgba(11, 27, 58, .12); }
+.stat:hover { translate: 0 -4px; box-shadow: 0 14px 34px rgba(15, 42, 31, .12); }
 .stat .v { font-variant-numeric: tabular-nums; }
 
 @property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
@@ -96,7 +103,7 @@
 @keyframes fx-ang { to { --ang: 360deg; } }
 .tilt { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, var(--lift, 0px), 0); }
 .tilt:hover, .tilt:focus-within { --lift: -6px; }
-.tilt:hover .card, .tilt:focus-within .card { box-shadow: 0 22px 48px rgba(11, 27, 58, .16); }
+.tilt:hover .card, .tilt:focus-within .card { box-shadow: 0 22px 48px rgba(15, 42, 31, .16); }
 
 /* progressive detail over the screenshot area, so card height never changes */
 .shot { position: relative; overflow: hidden; }
@@ -108,7 +115,7 @@
 
 /* lightbox */
 .lb { border: 0; padding: 0; border-radius: 16px; max-width: min(1200px, calc(100% - 24px)); width: auto; background: var(--surface); color: var(--text); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
-.lb::backdrop { background: rgba(7, 17, 31, .78); }
+.lb::backdrop { background: rgba(8, 20, 15, .8); }
 .lb[open] { animation: fx-lb .35s cubic-bezier(.2, .7, .2, 1); }
 .lb[open]::backdrop { animation: fx-fade .35s ease; }
 .lb img { display: block; width: 100%; height: auto; max-height: 78vh; object-fit: contain; background: #fff; }

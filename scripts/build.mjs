@@ -26,9 +26,9 @@ const css = [
   `.hero-dark{${Object.entries(fxVars).map(([k, v]) => `--${k}:${v}`).join(";")}}`,
 ].map(minify).join("\n");
 const motionJs = await readFile(path.join(root, "src/motion.js"), "utf8");
-// Midnight Navy hero layers; the case pages use the calmer two.
-const homeFx = heroFx(false, ["grid", "glow", "net", "graph"]);
-const caseFx = heroFx(true, ["grid", "glow"]);
+// Modern Emerald hero layers; the case pages use the calmer glow only.
+const homeFx = heroFx(false, ["glow", "bars", "graph"]);
+const caseFx = heroFx(true, ["glow"]);
 // Verified figures such as "+107.8%" count up; anything else renders as plain text.
 const counter = (value) => {
   const m = /^(\+?)(\d+(?:\.\d+)?)(%?)$/.exec(value);
@@ -55,7 +55,7 @@ function page({ title, description, pathname, body, jsonld }) {
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#0b1b3a">
+<meta name="theme-color" content="#0f2a1f">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>${css}</style>
 <script>document.documentElement.classList.add("js")</script>

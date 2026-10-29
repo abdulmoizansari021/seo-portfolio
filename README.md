@@ -6,9 +6,9 @@ An evidence-based portfolio for a Senior SEO Specialist. It is a static site: on
 
 ```
 src/data.mjs            every claim, metric, source and date range on the site
-src/theme.mjs           Midnight Navy colour tokens (light and dark); the build fails below 4.5:1 contrast
+src/theme.mjs           Modern Emerald colour tokens (light and dark); the build fails below 4.5:1 contrast
 src/styles.css          layout and components (inlined into each page at build time)
-src/motion.css          navy surfaces, hero effects, reveals, hover depth, lightbox, reduced-motion rules
+src/motion.css          dark surfaces, hero effects, reveals, hover depth, lightbox, reduced-motion rules
 src/motion.js           parallax, card tilt, scroll reveal, verified-metric counters, filters, lightbox
 src/themes.mjs          the 8 candidate palettes used only by the local theme gallery
 scripts/build.mjs       renders dist/ (home, 3 case study pages, 404, sitemap, robots)
@@ -81,7 +81,7 @@ Client names are withheld and the screenshots are cropped so no domain, property
 
 ## Theme and motion
 
-The site uses Theme 1, Midnight Navy, chosen from the local theme gallery. Colours live only in `src/theme.mjs`.
+The site uses Theme 2, Modern Emerald, chosen from the local theme gallery (it replaced Theme 1, Midnight Navy). Colours live only in `src/theme.mjs`; the hero layers are picked in `scripts/build.mjs` (home: glow, growth bars, graph; case pages: glow).
 
 - Effects use CSS transforms and opacity, so they cause no layout shift. The headline is painted on the first frame.
 - Count-up animation runs only on verified figures; the final value is in the HTML for search engines and screen readers.
@@ -103,12 +103,11 @@ Then open http://localhost:4173/theme-preview/.
 
 ## Measured performance
 
-Lighthouse 12.8.2, mobile emulation, local build, 29 Oct 2026, after applying Midnight Navy and motion (two runs per page):
+Lighthouse 12.8.2, mobile emulation, local build, 29 Oct 2026, after applying Modern Emerald (two runs per page):
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|
-| Home | 99 | 100 | 100 | 100 | 1.5 to 1.6 s | 0 |
-| Case A | 99 | 100 | 100 | 100 | 1.5 s | 0 |
-| Case C | 99 to 100 | 100 | 100 | 100 | 1.2 to 1.3 s | 0 |
+| Home | 100 | 100 | 100 | 100 | 1.2 to 1.3 s | 0 |
+| Case B | 100 | 100 | 100 | 100 | 1.3 s | 0 |
 
 The home page is about 14 KB gzipped including all CSS and JavaScript. Re-run Lighthouse against the deployed URL for production figures.

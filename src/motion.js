@@ -1,4 +1,4 @@
-// Midnight Navy interactions: parallax, card tilt, scroll reveal, verified-metric counters,
+// Portfolio interactions: parallax, card tilt, scroll reveal, verified-metric counters,
 // filter transitions and the evidence lightbox. Every effect is skipped under reduced motion.
 (() => {
   const root = document.documentElement;
