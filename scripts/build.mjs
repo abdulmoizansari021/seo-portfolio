@@ -39,7 +39,7 @@ const counter = (value) => {
 };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const img = (file, alt, { eager = false, sizes = "(min-width: 760px) 50vw, 100vw" } = {}) =>
-  `<img src="/images/evidence/${file}-720.webp" srcset="/images/evidence/${file}-720.webp 720w, /images/evidence/${file}.webp 1440w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="720" height="${file.includes("semrush") ? 498 : file.includes("ga4_traffic") ? 302 : file.includes("ga4") ? 292 : 304}">`;
+  `<img src="/images/evidence/${file}-720.webp" srcset="/images/evidence/${file}-720.webp 720w, /images/evidence/${file}.webp ${file.includes("semrush") ? 810 : file.includes("ga4") ? 1440 : 1122}w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="720" height="${file.includes("semrush") ? 498 : file.includes("ga4_traffic") ? 302 : file.includes("ga4") ? 292 : file.startsWith("case-d") ? 295 : 304}">`;
 
 function page({ title, description, pathname, body, jsonld }) {
   const url = `${SITE}${pathname}`;

@@ -231,6 +231,42 @@ export const caseStudies = [
       "Client name withheld pending publication approval.",
     ],
   },
+  {
+    slug: "ecommerce-rankings-australia",
+    label: "Case D",
+    title: "Lifting rankings for an Australian e-commerce store",
+    client: "Football equipment e-commerce store, Australia (Shopify)",
+    industry: "E-commerce",
+    market: "Australia",
+    tags: ["E-commerce", "Schema", "Technical SEO", "Internal linking", "Content strategy"],
+    summary:
+      "A Shopify store with popular blog content but thin structured data and weak links from articles to products. Schema fixes and blog-to-product linking were followed by an average position of 8.5, up from 13.9, and 33% more clicks year on year.",
+    challenge:
+      "The store's informational articles attracted most of its search visibility, but the theme's structured data was thin: the site search markup was broken, the organisation details were minimal, and none of the 57 articles or the collection pages carried their own schema. Blog posts rarely linked to the products they discussed.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I audited and rewrote the structured data in the Shopify theme, added the internal links, ran the keyword gap research and diagnosed the later click decline. Store content and products were managed by the client.",
+    actions: [
+      { date: "24 Jun 2026", text: "Audited the theme's structured data and published the fixes live on a duplicate theme, keeping the old one as a rollback: repaired the broken site search markup, enriched the organisation details, and added article schema to all 57 posts and collection schema to every collection." },
+      { date: "20 to 24 Jul 2026", text: "Added contextual links from blog posts to the matching product pages and between related articles, and fixed a broken link inside an existing post." },
+      { date: "2 Sep 2026", text: "Keyword gap research in Semrush (Australia) found a product category with roughly 14,800 monthly searches that the store already sold but had no page for, and recommended building collection pages for it." },
+      { date: "8 Oct 2026", text: "Diagnosed a recent dip in clicks as AI Overviews answering informational queries, while rankings kept improving, and recommended a commercial collection layer to reduce reliance on blog traffic." },
+    ],
+    metrics: [
+      { name: "Average position", before: "13.9", after: "8.5", change: "5.4 places better", source: "GSC Performance (web)", period: "28 Jun to 26 Oct 2026 compared with 28 Jun to 26 Oct 2025" },
+      { name: "Google Search clicks", before: "4.1k", after: "5.44k", change: "+32.7%", source: "GSC Performance (web)", period: "28 Jun to 26 Oct 2026 compared with 28 Jun to 26 Oct 2025" },
+      { name: "Impressions", before: "693k", after: "1.02m", change: "+47.2%", source: "GSC Performance (web)", period: "28 Jun to 26 Oct 2026 compared with 28 Jun to 26 Oct 2025" },
+    ],
+    evidence: [
+      { file: "case-d_gsc_performance_yoy_2026-06-28_2026-10-26", platform: "Google Search Console", report: "Performance, Search results, compare mode", period: "28 Jun to 26 Oct 2026 compared with 28 Jun to 26 Oct 2025", caption: "Clicks 5.44k vs 4.1k, impressions 1.02m vs 693k, average position 8.5 vs 13.9." },
+    ],
+    limitations: [
+      "The gap narrows across the period: by late September and October, daily clicks were back to roughly last year's level, even though average position stayed better. My October diagnosis traced this to AI Overviews answering the informational queries the blog ranks for.",
+      "The window starts four days after the schema work. Over the shorter 29 Jul to 26 Oct comparison used for the other case studies, the gain is smaller: clicks +15% and average position 12.7 to 8.6.",
+      "Search visibility had already started rising in late 2025, before the documented work, so part of the year-on-year gain predates it. Most clicks still come from informational articles; the recommended collection pages had not been built at the time of writing.",
+      "GSC totals above 1,000 are rounded in the Search Console interface. GA4 is not available for this store in the account used here, so no sales or conversion claims are made.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
 ];
 
 export const skills = [
