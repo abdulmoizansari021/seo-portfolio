@@ -132,4 +132,20 @@
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
   top && top.addEventListener("click", () => scrollTo({ top: 0, behavior: motion() ? "smooth" : "auto" }));
+
+  // Round menu button: opens the panel, closes on Escape, outside click or link choice.
+  const menuBtn = document.querySelector(".menu-btn"), panel = document.getElementById("menu-panel");
+  if (menuBtn && panel) {
+    const setOpen = (open) => {
+      menuBtn.setAttribute("aria-expanded", open);
+      menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      panel.hidden = !open;
+      panel.classList.toggle("open", open);
+      if (open) panel.querySelector("a")?.focus();
+    };
+    menuBtn.addEventListener("click", () => setOpen(menuBtn.getAttribute("aria-expanded") !== "true"));
+    panel.addEventListener("click", (e) => { if (e.target.closest("a")) setOpen(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) { setOpen(false); menuBtn.focus(); } });
+    document.addEventListener("click", (e) => { if (!panel.hidden && !panel.contains(e.target) && !menuBtn.contains(e.target)) setOpen(false); });
+  }
 })();

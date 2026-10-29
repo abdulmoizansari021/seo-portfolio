@@ -70,7 +70,13 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <nav class="nav" aria-label="Main">
 <a href="/services/">Services</a><a href="/#results">Results</a><a href="/#case-studies">Case studies</a><a href="/about/">About</a><a href="/#faq">FAQ</a>
 </nav>
-<a class="btn btn-hero btn-sm" href="#contact">Get in touch <span class="arr" aria-hidden="true">&rarr;</span></a>
+<div class="head-right"><div class="socials head-socials">${socialLinks()}</div>
+<button type="button" class="menu-btn" aria-expanded="false" aria-controls="menu-panel" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M5 7h14"/><path class="l2" d="M5 12h14"/><path class="l3" d="M5 17h14"/></svg></button></div>
+</div>
+<div class="menu-panel" id="menu-panel" hidden>
+<nav aria-label="Menu"><a href="/">Home</a><a href="/services/">Services</a><a href="/#results">Results</a><a href="/#case-studies">Case studies</a><a href="/about/">About</a><a href="/#faq">FAQ</a></nav>
+<a class="btn btn-hero" href="#contact">Get in touch <span class="arr" aria-hidden="true">&rarr;</span></a>
+<p class="menu-mail"><a href="${mailto}">${esc(profile.email)}</a></p>
 </div></header>
 <main id="main">
 ${body}
@@ -135,10 +141,10 @@ const icon = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 const socialLinks = () => [
   `<a href="${mailto}" aria-label="Email">${icon('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>')}</a>`,
   profile.whatsapp ? `<a href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener" aria-label="WhatsApp">${icon('<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5l1.2-1.2 2 1-.5 1.7c-3.6.4-7.6-3.6-7.2-7.2l1.7-.5 1 2z"/>')}</a>` : "",
-  ...profile.links.map((l) => `<a href="${esc(l.href)}" rel="me noopener" aria-label="${esc(l.label)}">${icon('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>')}</a>`),
+  ...profile.links.map((l) => `<a href="${esc(l.href)}" rel="me noopener" target="_blank" aria-label="${esc(l.label)} (opens in a new tab)">${/linkedin/i.test(l.label) ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.9 8.6H3.6V20h3.3zM5.25 3.5a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8zM20.4 13.4c0-3.1-1.7-4.9-4.3-4.9-1.4 0-2.4.7-2.9 1.5V8.6H10V20h3.3v-5.7c0-1.5.5-2.6 1.9-2.6s1.9 1.1 1.9 2.7V20h3.3z"/></svg>' : icon('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>')}</a>`),
 ].join("");
 const personLd = {
-  "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, jobTitle: profile.title, email: `mailto:${profile.email}`, url: `${SITE}/`,
+  "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, ...(profile.photo ? { image: `${SITE}${profile.photo}` } : {}), jobTitle: profile.title, email: `mailto:${profile.email}`, url: `${SITE}/`,
   address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
   worksFor: { "@type": "Organization", name: "Digital Eggheads" },
   knowsAbout: ["Search engine optimization", "Technical SEO", "Local SEO", "Structured data", "Answer engine optimization", "Generative engine optimization"],
@@ -152,28 +158,26 @@ const home = page({
   pathname: "/",
   jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd] },
   body: `
-<section class="studio-hero">
+<section class="studio-hero${profile.cutout ? " has-cutout" : ""}">
 <div class="outline-band" aria-hidden="true"><div class="row"><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span></div></div>
 <div class="wrap hero-grid">
 <div class="hero-left">
-<span class="hello rise">Hello, I am</span>
+<span class="hello rise">Hello, I&rsquo;m</span>
 <h1 class="hero-name">${esc(profile.name)}</h1>
-<p class="hero-role rise" style="--dl:.1s">${esc(profile.title)}</p>
-<p class="hero-promise rise" style="--dl:.18s">${esc(profile.promise)}. ${esc(profile.pitch)}</p>
-<div class="cta rise" style="--dl:.26s"><a class="btn btn-hero" href="#contact">Get in touch <span class="arr" aria-hidden="true">&rarr;</span></a><a class="btn btn-hero-ghost" href="#results">See the results</a></div>
+<div class="cta rise" style="--dl:.2s"><a class="btn btn-hero btn-lg" href="#case-studies">View Case Studies <span class="arr" aria-hidden="true">&rarr;</span></a></div>
 </div>
-<div class="hero-visual rise" style="--dl:.12s">
-<span class="ring r1" aria-hidden="true"></span><span class="ring r2" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
-${profile.photo
-  ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="380" height="460" fetchpriority="high">`
-  : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
+<div class="hero-visual">
+${profile.cutout
+  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="241" height="346" fetchpriority="high" decoding="async">`
+  : profile.photo
+    ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="346" height="346" fetchpriority="high" decoding="async">`
+    : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
 </div>
 <div class="hero-right rise" style="--dl:.22s">
-<h2>About me</h2>
-<p>I help brands get more <strong>leads and sales from search</strong>, with every result tracked in their own Search Console and GA4. ${esc(profile.availability)}.</p>
-<h2>Find me</h2>
+<h2>About Me</h2>
+<p>I&rsquo;m a <strong>Senior SEO Specialist</strong> in Karachi helping brands get more <strong>leads and sales from Google and AI search</strong>. Every result is tracked in your own Search Console and GA4.</p>
+<h2>Find me on</h2>
 <div class="socials">${socialLinks()}</div>
-<div class="hero-facts"><div><b>4+</b><span>Years in SEO</span></div><div><b>20+</b><span>Websites managed</span></div></div>
 </div>
 </div></section>
 
@@ -220,7 +224,7 @@ ${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p
 
 <section id="about-teaser"><div class="wrap"><div class="exp">
 <div class="exp-main rv">
-<div class="big"><b>4+</b><span>Years of<br>SEO experience</span></div>
+<div class="big"><b>4+</b><span>Years of<br>SEO experience</span>${profile.avatar ? `<img class="avatar" src="${esc(profile.avatar)}" alt="" width="112" height="112" loading="lazy" decoding="async">` : ""}</div>
 <h2>Meet Moiz</h2>
 <p>I am a Senior SEO Specialist based in Karachi. I have managed end-to-end SEO for more than 20 websites, from local clinics to e-commerce stores and software companies, across technical, on-page, off-page, local and AI search.</p>
 <a class="btn btn-hero" href="/about/">More about me</a>
@@ -273,9 +277,9 @@ const aboutPage = page({
   body: `
 ${band({ crumbs: "About", eyebrow: `${profile.title} · ${profile.location}`, title: "About Moiz", lede: profile.summary })}
 <div class="wrap">
-<section><h2>How I approach SEO</h2>
+<section class="about-intro">${profile.photo ? `<img class="about-photo rv" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="346" height="346" loading="lazy" decoding="async">` : ""}<div><h2>How I approach SEO</h2>
 <div class="prose rv"><p>I care about the numbers a business owner can check: clicks, sessions, leads and calls in their own accounts. That is why every result on this site links to the report it comes from, and why I label anything I cannot verify.</p>
-<p>Most of my recent work is in healthcare and other sensitive topics, where accuracy and trust signals matter as much as keywords. I also work with local businesses, e-commerce stores and software companies.</p></div></section>
+<p>Most of my recent work is in healthcare and other sensitive topics, where accuracy and trust signals matter as much as keywords. I also work with local businesses, e-commerce stores and software companies.</p></div></div></section>
 
 <section><h2>Experience</h2>
 <div class="timeline">

@@ -75,7 +75,12 @@ section { padding: 64px 0; }
 .graph-card .fx { inset: 44px 0 0; }
 .graph-card .L-graph svg { width: 92%; right: 4%; bottom: 8%; max-width: none; }
 .graph-card .fx-scrim { display: none; }
-.studio-portrait { position: relative; z-index: 1; width: min(100%, 380px); height: auto; border-radius: 0 0 200px 200px; }
+.studio-portrait { position: relative; z-index: 1; width: min(100%, 346px); height: auto; border-radius: 50%; filter: drop-shadow(0 24px 40px rgba(20, 20, 22, .14)); }
+.exp-main .big { position: relative; }
+.exp-main .avatar { width: 84px; height: 84px; border-radius: 50%; margin-left: auto; box-shadow: 0 0 0 4px var(--surface); }
+.about-intro { display: grid; gap: 28px; align-items: center; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .about-intro { grid-template-columns: 300px 1fr; gap: 48px; } }
+.about-photo { width: min(100%, 300px); height: auto; border-radius: 50%; justify-self: center; }
 
 /* service cards: centred outline icon that flips on hover */
 .svc { text-align: center; align-items: center; padding: 30px 22px; box-shadow: none; }
@@ -182,3 +187,40 @@ section { padding: 64px 0; }
   .svc:hover .ico svg { transform: none; }
   .svc-rows a::before, .site-head .nav a::after { transition: none; }
 }
+
+/* reference-style hero: name and one button, standing cut-out, about column */
+.btn-lg { padding: 16px 30px; font-size: 1.05rem; }
+.studio-hero.has-cutout { padding: 40px 0 0; background: var(--bg); }
+@media (min-width: 980px) {
+  .studio-hero.has-cutout .hero-grid { grid-template-columns: 1.12fr 1fr .85fr; min-height: min(640px, calc(100vh - 72px)); align-items: center; }
+  .studio-hero.has-cutout .hero-visual { align-self: end; min-height: 0; }
+}
+.studio-hero.has-cutout .hero-name { font-size: clamp(3rem, 6vw, 4.8rem); line-height: .95; margin-bottom: 28px; }
+.studio-hero.has-cutout .hello { font-size: 1.35rem; }
+.hero-cutout { display: block; position: relative; z-index: 2; width: auto; height: clamp(420px, 68vh, 560px); max-width: 100%; margin: 0 auto; -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%); mask-image: linear-gradient(to bottom, #000 90%, transparent 100%); }
+@media (max-width: 979px) { .hero-cutout { height: 380px; } .studio-hero.has-cutout { padding-bottom: 40px; } }
+.studio-hero.has-cutout .outline-band { bottom: 70px; z-index: 1; }
+.studio-hero.has-cutout .hero-right h2 { font-size: 1.15rem; font-weight: 500; margin-bottom: 14px; }
+.studio-hero.has-cutout .hero-right p { font-size: 1.02rem; line-height: 1.85; color: var(--text); margin-bottom: 30px; }
+.studio-hero.has-cutout .hero-right strong { color: var(--brand); font-weight: 500; }
+
+/* header right: social circles and the round menu button */
+.head-right { display: flex; align-items: center; gap: 10px; }
+.head-socials { display: none; }
+@media (min-width: 1100px) { .head-socials { display: flex; } }
+.menu-btn { width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; cursor: pointer; transition: transform .25s ease; }
+.menu-btn:hover { transform: scale(1.06); }
+.menu-btn svg { width: 22px; height: 22px; }
+.menu-btn path { transition: transform .3s ease, opacity .2s ease; transform-origin: 12px 12px; }
+.menu-btn[aria-expanded="true"] .l1 { transform: translateY(5px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] .l2 { opacity: 0; }
+.menu-btn[aria-expanded="true"] .l3 { transform: translateY(-5px) rotate(-45deg); }
+.menu-panel { position: absolute; right: 16px; top: calc(100% + 8px); width: min(320px, calc(100vw - 32px)); background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 60px rgba(20, 20, 22, .18); padding: 18px; display: grid; gap: 14px; }
+.menu-panel[hidden] { display: none; }
+.menu-panel.open { animation: fx-rise-in .3s cubic-bezier(.2, .7, .2, 1); }
+.menu-panel nav { display: grid; }
+.menu-panel nav a { color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 1.3rem; padding: 8px 4px; border-bottom: 1px solid var(--line); transition: color .2s, padding-left .25s; }
+.menu-panel nav a:hover, .menu-panel nav a:focus-visible { color: var(--brand); padding-left: 10px; }
+.menu-panel .btn { justify-content: center; }
+.menu-mail { margin: 0; text-align: center; font-size: .9rem; }
+@media (prefers-reduced-motion: reduce) { .menu-panel.open { animation: none; } .menu-btn path { transition: none; } }

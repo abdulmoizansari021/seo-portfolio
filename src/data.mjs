@@ -10,7 +10,7 @@ export const profile = {
   email: "abdulmoizansari021@gmail.com",
   cv: "/cv/Abdul-Moiz-Ansari-SEO-CV.pdf",
   // Add a real profile URL here (for example LinkedIn) and it will appear in the contact section.
-  links: [],
+  links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/abdul-moiz-ansari/" }],
   summary:
     "Senior SEO Specialist with 4+ years of experience, managing end-to-end SEO for 20+ websites across on-page, off-page, technical, local, AEO and GEO. I run audits, keyword and competitor research, content optimisation and reporting in Google Search Console, GA4 and Semrush, then ship the fixes myself.",
   // Client-facing pitch used on the home page.
@@ -20,7 +20,10 @@ export const profile = {
   // Optional: a WhatsApp number in international format (for example "923001234567") adds a WhatsApp button.
   whatsapp: "",
   // Optional: path to a portrait in public/ (for example "/images/moiz.webp"). It replaces the hero graph on desktop.
-  photo: "",
+  photo: "/images/moiz-ansari.webp",
+  // Background-removed portrait for the home hero (falls back to the round photo).
+  cutout: "/images/moiz-ansari-cutout.webp",
+  avatar: "/images/moiz-ansari-112.webp",
 };
 
 // Prefilled email so a prospect sends the details needed for a first reply.

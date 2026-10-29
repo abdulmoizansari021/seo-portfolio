@@ -79,7 +79,9 @@ No other environment variables are used, so there is no `.env.example`.
 
 Optional fields in `profile` (in `src/data.mjs`):
 
-- `photo`: a portrait in `public/` (for example `/images/moiz.webp`, about 840x1040). It replaces the hero graph on desktop.
+- `photo`: the round portrait used on About and in the experience panel (`/images/moiz-ansari.webp`).
+- `cutout`: a background-removed portrait shown standing in the home hero (`/images/moiz-ansari-cutout.webp`). The current file is 241x346 px, made from a 400 px photo; a larger original (1000 px tall or more) would look sharper and clear Lighthouse's `image-size-responsive` warning.
+- `avatar`: a small round version for the experience panel.
 - `whatsapp`: a number in international format (for example `923001234567`) adds a WhatsApp button next to email.
 - `links`: profile links such as LinkedIn, shown in every contact block.
 
