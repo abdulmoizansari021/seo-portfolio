@@ -6,10 +6,15 @@ An evidence-based portfolio for a Senior SEO Specialist. It is a static site: on
 
 ```
 src/data.mjs            every claim, metric, source and date range on the site
-src/styles.css          all styles (inlined into each page at build time)
+src/theme.mjs           Midnight Navy colour tokens (light and dark); the build fails below 4.5:1 contrast
+src/styles.css          layout and components (inlined into each page at build time)
+src/motion.css          navy surfaces, hero effects, reveals, hover depth, lightbox, reduced-motion rules
+src/motion.js           parallax, card tilt, scroll reveal, verified-metric counters, filters, lightbox
+src/themes.mjs          the 8 candidate palettes used only by the local theme gallery
 scripts/build.mjs       renders dist/ (home, 3 case study pages, 404, sitemap, robots)
 scripts/check.mjs       fails the build output on broken links, private strings or em dashes
 scripts/serve.mjs       local preview server
+scripts/build-themes.mjs, scripts/theme-fx.mjs   local-only theme gallery (never deployed)
 public/images/evidence  anonymised report screenshots (WebP, full width and 720px)
 public/cv               public-safe CV (no street address)
 cv-source               HTML source of the public CV
@@ -72,17 +77,38 @@ Edit `src/data.mjs`, then build. Each metric has `source` and `period` fields; k
 
 ## Client names and screenshots
 
-Client names are withheld and the screenshots are cropped so no domain, property, account or organisation name is visible. Named originals are kept outside this repository. When a client approves publication in writing, you can replace the anonymised `client` field and title for that case study. `scripts/check.mjs` blocks known client domains from the build output; remove a domain from its `banned` list only after that client has approved.
+Client names are withheld and the screenshots are cropped so no domain, property, account or organisation name is visible. Named originals are kept outside this repository. When a client approves publication in writing, you can replace the anonymised `client` field and title for that case study. `scripts/check.mjs` blocks client names listed in the untracked `private-terms.txt` from the build output; remove a name from that file only after that client has approved.
+
+## Theme and motion
+
+The site uses Theme 1, Midnight Navy, chosen from the local theme gallery. Colours live only in `src/theme.mjs`.
+
+- Effects use CSS transforms and opacity, so they cause no layout shift. The headline is painted on the first frame.
+- Count-up animation runs only on verified figures; the final value is in the HTML for search engines and screen readers.
+- Decorative animation pauses when the tab is hidden or the hero is off screen.
+- `prefers-reduced-motion` turns off all movement: content shows immediately and the graph is drawn statically.
+- Content is fully visible without JavaScript.
+
+To reopen the theme gallery locally (it is excluded from the Vercel build):
+
+```bash
+npm run themes
+```
+
+```bash
+npm run preview
+```
+
+Then open http://localhost:4173/theme-preview/.
 
 ## Measured performance
 
-Lighthouse 12.8.2, mobile emulation, local build, 29 Oct 2026:
+Lighthouse 12.8.2, mobile emulation, local build, 29 Oct 2026, after applying Midnight Navy and motion (two runs per page):
 
-| Page | Performance | Accessibility | Best practices | SEO |
-|---|---|---|---|---|
-| Home | 100 | 100 | 100 | 100 |
-| Case A | 92 to 97 | 100 | 100 | 100 |
-| Case B | 100 | 100 | 100 | 100 |
-| Case C | 99 | 100 | 100 | 100 |
+| Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
+|---|---|---|---|---|---|---|
+| Home | 99 | 100 | 100 | 100 | 1.5 to 1.6 s | 0 |
+| Case A | 99 | 100 | 100 | 100 | 1.5 s | 0 |
+| Case C | 99 to 100 | 100 | 100 | 100 | 1.2 to 1.3 s | 0 |
 
-Case page performance varied between runs because of local CPU load (Total Blocking Time 110 to 340 ms on pages with no scripts). Re-run Lighthouse against the deployed URL for production figures.
+The home page is about 14 KB gzipped including all CSS and JavaScript. Re-run Lighthouse against the deployed URL for production figures.

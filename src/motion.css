@@ -1,0 +1,136 @@
+/* Midnight Navy surfaces and motion. Transforms and opacity only, so nothing shifts layout.
+   Content is fully visible without JavaScript; reveals are gated on the .js class. */
+
+/* navy header */
+.site-head { background: color-mix(in srgb, var(--hero) 94%, transparent); border-bottom-color: color-mix(in srgb, var(--hero-ink) 12%, transparent); }
+.site-head .logo { color: var(--hero-ink); }
+.site-head .logo span { color: var(--hero-muted); }
+.site-head .nav a { color: var(--hero-muted); transition: color .2s; }
+.site-head .nav a:hover { color: var(--hero-ink); }
+.btn-hero { background: var(--hero-accent); color: var(--hero); }
+.btn-hero-ghost { background: transparent; color: var(--hero-ink); border-color: color-mix(in srgb, var(--hero-ink) 40%, transparent); }
+.site-head :focus-visible, .hero-dark :focus-visible, .contact :focus-visible { outline-color: var(--hero-accent); }
+
+/* hero band */
+.hero-dark { position: relative; overflow: hidden; isolation: isolate; background: var(--hero); color: var(--hero-muted); padding: 72px 0 80px; }
+.hero-dark h1, .hero-dark .role { color: var(--hero-ink); }
+.hero-dark .eyebrow { color: var(--hero-accent); }
+.hero-dark .lede { color: var(--hero-muted); }
+.hero-dark .meta-row { color: var(--hero-muted); }
+.hero-dark .role { font-size: clamp(1.15rem, 2.4vw, 1.45rem); font-weight: 600; margin: -4px 0 16px; }
+.hero-dark .tagline { color: var(--hero-ink); font-size: clamp(1.05rem, 2vw, 1.2rem); font-weight: 600; margin-bottom: 8px; }
+.hero-dark .crumbs { color: var(--hero-muted); padding-top: 0; }
+.hero-dark .crumbs a { color: var(--hero-accent); }
+.hero-content { position: relative; z-index: 2; max-width: 660px; }
+.case-band { padding: 34px 0 46px; }
+.case-band h1 { font-size: clamp(1.8rem, 4.4vw, 2.8rem); }
+
+.fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.L { position: absolute; inset: 0; transform: translate3d(calc(var(--px, 0) * var(--d, 0) * 1px), calc(var(--py, 0) * var(--d, 0) * 1px), 0); transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+.fx-scrim { position: absolute; inset: 0; background: linear-gradient(90deg, var(--hero) 0%, color-mix(in srgb, var(--hero) 82%, transparent) 42%, transparent 80%); }
+@media (max-width: 760px) { .fx-scrim { background: color-mix(in srgb, var(--hero) 74%, transparent); } }
+
+.L-grid i { position: absolute; inset: calc(var(--grid-size) * -1); background-image: linear-gradient(color-mix(in srgb, var(--hero-accent) calc(var(--grid-o) * 100%), transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--hero-accent) calc(var(--grid-o) * 100%), transparent) 1px, transparent 1px); background-size: var(--grid-size) var(--grid-size); -webkit-mask-image: radial-gradient(ellipse 70% 80% at 75% 40%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 70% 80% at 75% 40%, #000 20%, transparent 75%); animation: fx-pan calc(9s * var(--spd)) linear infinite; }
+@keyframes fx-pan { to { transform: translate3d(var(--grid-size), var(--grid-size), 0); } }
+
+.L-glow i { position: absolute; width: 60%; aspect-ratio: 1; border-radius: 50%; opacity: var(--glow-o); background: radial-gradient(circle at center, var(--hero-accent) 0%, transparent 62%); animation: fx-drift calc(16s * var(--spd)) ease-in-out infinite; }
+.L-glow .b1 { right: -12%; top: -30%; }
+.L-glow .b2 { right: 20%; bottom: -45%; background: radial-gradient(circle at center, var(--brand) 0%, transparent 60%); animation-delay: -6s; }
+.L-glow .b3 { right: -5%; bottom: -20%; width: 40%; animation-delay: -11s; }
+@keyframes fx-drift { 0%, 100% { transform: translate3d(0, 0, 0) scale(1); } 50% { transform: translate3d(-6%, 5%, 0) scale(1.1); } }
+
+.L-net svg { position: absolute; right: 0; top: 0; width: 50%; height: 100%; }
+@media (max-width: 760px) { .L-net { opacity: .45; } }
+.L-net line { stroke: var(--hero-accent); stroke-opacity: .2; stroke-width: 1; }
+.L-net circle { fill: var(--hero-accent); transform-box: fill-box; transform-origin: center; animation: fx-pulse calc(4s * var(--spd)) ease-in-out infinite; }
+.L-net circle:nth-child(3n) { animation-delay: -1.3s; }
+.L-net circle:nth-child(3n+1) { animation-delay: -2.6s; }
+@keyframes fx-pulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.7); opacity: .35; } }
+
+.L-graph svg { position: absolute; right: 2%; bottom: 10%; width: 44%; max-width: 520px; height: auto; overflow: visible; }
+.L-graph .area { fill: color-mix(in srgb, var(--hero-accent) 10%, transparent); }
+.L-graph .draw { fill: none; stroke: var(--hero-accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.js .L-graph .draw { stroke-dashoffset: 1; animation: fx-draw 1.8s cubic-bezier(.4, .1, .2, 1) .2s forwards; }
+.L-graph .base { fill: none; stroke: var(--hero-muted); stroke-opacity: .45; stroke-width: 1.5; stroke-dasharray: 5 6; }
+.L-graph .pt { fill: var(--hero); stroke: var(--hero-accent); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: fx-pulse calc(3.2s * var(--spd)) ease-in-out infinite; }
+.L-graph .chip { position: absolute; font-size: .72rem; font-weight: 600; letter-spacing: .03em; padding: 5px 10px; border-radius: 999px; color: var(--hero-ink); background: color-mix(in srgb, var(--hero-ink) 10%, transparent); border: 1px solid color-mix(in srgb, var(--hero-ink) 18%, transparent); animation: fx-float calc(6s * var(--spd)) ease-in-out infinite; }
+.L-graph .c1 { right: 36%; top: 18%; }
+.L-graph .c2 { right: 8%; top: 30%; animation-delay: -2s; }
+.L-graph .c3 { right: 24%; bottom: 8%; animation-delay: -4s; }
+@keyframes fx-draw { to { stroke-dashoffset: 0; } }
+@keyframes fx-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@media (max-width: 760px) { .L-graph svg { width: 84%; right: -12%; opacity: .5; } .L-graph .chip { display: none; } }
+
+/* hero entrance: the headline is painted on the first frame (no opacity change), so LCP is unaffected */
+.js .hero-dark h1 { animation: fx-settle .8s cubic-bezier(.2, .7, .2, 1) both; }
+.js .hero-dark .rise { animation: fx-rise-in .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--dl, 0s); }
+@keyframes fx-settle { from { transform: translate3d(0, 12px, 0); } to { transform: none; } }
+@keyframes fx-rise-in { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
+
+/* scroll reveal */
+.js .rv { opacity: 0; transform: translate3d(0, 20px, 0); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i, 0) * 70ms); }
+.js .rv.in { opacity: 1; transform: none; }
+
+/* revealed stat cards keep a quick hover lift */
+.js .stat.rv { transition: translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s, opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); transition-delay: 0s, 0s, calc(var(--i, 0) * 70ms), calc(var(--i, 0) * 70ms); }
+.more span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* depth and hover */
+.btn { transition: transform .2s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px color-mix(in srgb, var(--brand) 28%, transparent); }
+.btn-hero:hover { box-shadow: 0 8px 26px color-mix(in srgb, var(--hero-accent) 45%, transparent); }
+.stat { transition: translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s, opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
+.stat:hover { translate: 0 -4px; box-shadow: 0 14px 34px rgba(11, 27, 58, .12); }
+.stat .v { font-variant-numeric: tabular-nums; }
+
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.gb { border-radius: calc(var(--radius) + 2px); padding: 2px; background: conic-gradient(from var(--ang), var(--brand), var(--hero-accent), var(--line) 35%, var(--line) 65%, var(--brand)); display: flex; transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+.gb:hover, .gb:focus-within { animation: fx-ang 4s linear infinite; }
+.gb > .card { border: 0; flex: 1; }
+/* filter transitions act on the outer wrapper so they never fight the reveal or tilt transforms */
+.cw { display: flex; }
+.cw[hidden] { display: none; }
+.js .cw.quick { transition-duration: .3s; transition-delay: 0s; }
+.js .rv.cw.out, .cw.out { opacity: 0; transform: scale(.96); }
+.cw > .gb { flex: 1; }
+@keyframes fx-ang { to { --ang: 360deg; } }
+.tilt { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, var(--lift, 0px), 0); }
+.tilt:hover, .tilt:focus-within { --lift: -6px; }
+.tilt:hover .card, .tilt:focus-within .card { box-shadow: 0 22px 48px rgba(11, 27, 58, .16); }
+
+/* progressive detail over the screenshot area, so card height never changes */
+.shot { position: relative; overflow: hidden; }
+.more { position: absolute; inset: 0; padding: 16px 18px; background: color-mix(in srgb, var(--hero) 94%, transparent); color: var(--hero-muted); font-size: .86rem; display: grid; align-content: center; gap: 6px; transform: translate3d(0, 101%, 0); transition: transform .4s cubic-bezier(.2, .7, .2, 1); }
+.more b { color: var(--hero-accent); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+.more span { color: var(--hero-ink); }
+.tilt:hover .more, .tilt:focus-within .more { transform: none; }
+@media (hover: none) { .more { display: none; } }
+
+/* lightbox */
+.lb { border: 0; padding: 0; border-radius: 16px; max-width: min(1200px, calc(100% - 24px)); width: auto; background: var(--surface); color: var(--text); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.lb::backdrop { background: rgba(7, 17, 31, .78); }
+.lb[open] { animation: fx-lb .35s cubic-bezier(.2, .7, .2, 1); }
+.lb[open]::backdrop { animation: fx-fade .35s ease; }
+.lb img { display: block; width: 100%; height: auto; max-height: 78vh; object-fit: contain; background: #fff; }
+.lb .lb-bar { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 14px 16px; font-size: .9rem; }
+.lb .lb-bar strong { color: var(--ink); display: block; }
+@keyframes fx-lb { from { opacity: 0; transform: scale(.95) translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fx-fade { from { opacity: 0; } }
+figure a { cursor: zoom-in; overflow: hidden; }
+figure a img { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+figure a:hover img { transform: scale(1.025); }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* pause decorative motion when the tab is hidden or the hero is off screen */
+.paused .fx *, .fx.idle * { animation-play-state: paused !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx *, .gb, .lb[open], .lb[open]::backdrop, .js .hero-dark h1, .js .hero-dark .rise { animation: none !important; }
+  .L { transform: none !important; transition: none !important; }
+  .js .L-graph .draw { stroke-dashoffset: 0; }
+  .js .rv { opacity: 1; transform: none; transition: none; }
+  .tilt, .btn:hover, figure a:hover img { transform: none !important; }
+  .stat:hover { translate: none; }
+  .more { transition: none; }
+}
