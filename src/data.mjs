@@ -6,14 +6,95 @@ export const profile = {
   name: "Abdul Moiz Ansari",
   title: "Senior SEO Specialist",
   location: "Karachi, Pakistan",
-  availability: "Open to on-site roles in Pakistan and remote roles worldwide",
+  availability: "Working with brands in Pakistan and worldwide",
   email: "abdulmoizansari021@gmail.com",
   cv: "/cv/Abdul-Moiz-Ansari-SEO-CV.pdf",
   // Add a real profile URL here (for example LinkedIn) and it will appear in the contact section.
   links: [],
   summary:
     "Senior SEO Specialist with 4+ years of experience, managing end-to-end SEO for 20+ websites across on-page, off-page, technical, local, AEO and GEO. I run audits, keyword and competitor research, content optimisation and reporting in Google Search Console, GA4 and Semrush, then ship the fixes myself.",
+  // Client-facing pitch used on the home page.
+  promise: "More customers from Google and AI search",
+  pitch:
+    "I help brands grow organic traffic, leads and sales through technical SEO, content strategy, local search and AI visibility. You see the results in your own Search Console and GA4, not in a slide deck.",
+  // Optional: a WhatsApp number in international format (for example "923001234567") adds a WhatsApp button.
+  whatsapp: "",
+  // Optional: path to a portrait in public/ (for example "/images/moiz.webp"). It replaces the hero graph on desktop.
+  photo: "",
 };
+
+// Prefilled email so a prospect sends the details needed for a first reply.
+export const enquiry = {
+  subject: "SEO enquiry",
+  body: "Website:\nWhat I want more of (leads, sales, calls, bookings):\nMain markets or cities:\nCan share Search Console and GA4 access (yes or no):\nAnything else:\n",
+};
+
+export const services = [
+  {
+    id: "audit", icon: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 11h6M11 8v6"/>', name: "SEO audit and roadmap", outcome: "Find out exactly what is holding your site back, in priority order.",
+    includes: ["Technical crawl: indexation, redirects, duplicates, Core Web Vitals", "On-page and content review of your key pages", "Keyword and competitor gap analysis", "A prioritised action plan ranked by impact and effort"],
+    proof: { label: "See a rebuild that kept growing", slug: "surgical-practice-site-rebuild" },
+  },
+  {
+    id: "technical", icon: '<path d="M9 7 4 12l5 5M15 7l5 5-5 5"/>', name: "Technical SEO and site migrations", outcome: "Make sure Google can find, crawl and trust every page that matters.",
+    includes: ["Redirect mapping before and after a redesign", "Indexation clean-up and canonical fixes", "Structured data (schema) design and deployment", "Speed and Core Web Vitals checks"],
+    proof: { label: "See the migration case study", slug: "surgical-practice-site-rebuild" },
+  },
+  {
+    id: "content", icon: '<path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6M9 8h3"/>', name: "Content and keyword strategy", outcome: "Write what your customers actually search for, and connect it to the pages that sell.",
+    includes: ["Keyword and search intent research", "Topic clusters and a content roadmap", "Briefs your writers can follow", "Internal linking from blog posts to service and product pages"],
+    proof: { label: "See the specialist physician case study", slug: "interventional-radiology-visibility" },
+  },
+  {
+    id: "local", icon: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>', name: "Local SEO and Google Business Profile", outcome: "Show up when people nearby search for what you offer.",
+    includes: ["Google Business Profile audit and optimisation", "Categories, services, hours and description fixes", "Location and service-area pages", "Citations, listings and a review workflow"],
+    proof: { label: "See the local practice case study", slug: "surgical-practice-site-rebuild" },
+  },
+  {
+    id: "ai", icon: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 12h4"/>', name: "AI search visibility (AEO and GEO)", outcome: "Give Google AI Overviews, ChatGPT and Perplexity clear answers they can cite.",
+    includes: ["Answer-ready content structure", "Entity and organisation structured data", "Trust signals for health, legal and finance topics", "AI visibility checks on your key questions"],
+    proof: { label: "See the healthcare case study", slug: "healthcare-ngo-organic-growth" },
+  },
+  {
+    id: "management", icon: '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>', name: "Ongoing SEO management", outcome: "A hands-on specialist who keeps shipping improvements every month.",
+    includes: ["Monthly prioritised work plan", "Implementation in your CMS or with your developer", "Reporting from your own GSC and GA4 data", "Honest notes on what worked and what did not"],
+    proof: { label: "See the healthcare case study", slug: "healthcare-ngo-organic-growth" },
+  },
+];
+
+export const audiences = [
+  "Clinics, hospitals and healthcare brands",
+  "Local service businesses",
+  "E-commerce stores on Shopify and WooCommerce",
+  "B2B software and SaaS companies",
+  "Non-profits and education",
+];
+
+// Industries with documented client work in the SEO workspace.
+export const industries = ["Healthcare and clinics", "E-commerce", "Automotive dealerships", "POS and ERP software", "Education", "Non-profits", "Restaurants and bakeries", "Printing and local services"];
+
+export const processSteps = [
+  { step: "Access and baseline", text: "You share read access to Search Console and GA4. I record where you stand today, so every later claim has a starting point." },
+  { step: "Audit and plan", text: "I find the problems and opportunities, then rank them by business impact and effort. You get a plan, not a 90-page PDF." },
+  { step: "Implement", text: "I make the changes in your CMS or work alongside your developer: technical fixes, schema, content, internal links." },
+  { step: "Report", text: "Every month you see the numbers from your own accounts, what changed, and what comes next." },
+];
+
+export const promises = [
+  { title: "Real data only", text: "Every number I report comes from your own Search Console and GA4. If a figure is not available, I say so instead of estimating it." },
+  { title: "Hands-on execution", text: "I do not stop at recommendations. I deploy the schema, map the redirects and add the links myself." },
+  { title: "No ranking guarantees", text: "Nobody controls Google's results. What I commit to is the work, the priorities and transparent measurement." },
+  { title: "Careful with sensitive topics", text: "Much of my work is in healthcare, where accuracy and trust signals matter as much as keywords." },
+];
+
+export const faq = [
+  { q: "How long before I see results?", a: "It depends on your site's condition and your competition. Technical fixes can show up in Search Console within weeks; content and authority work usually takes several months. I set expectations from your own baseline data, not from averages." },
+  { q: "Do you guarantee first-page rankings?", a: "No. Anyone who guarantees rankings is guessing. I commit to clear priorities, steady implementation and honest reporting from your own data." },
+  { q: "What do you need from me to start?", a: "Read access to Google Search Console and GA4, access to your website (or a developer contact), and a clear idea of what you want more of: leads, sales, calls or bookings." },
+  { q: "Do you work with businesses outside Pakistan?", a: "Yes. I work remotely and have worked on websites targeting Pakistan, Australia, the United Kingdom and the United States." },
+  { q: "Which platforms do you work with?", a: "WordPress, WooCommerce, Shopify and Wix, plus custom sites where I work with your developer." },
+  { q: "How much does it cost?", a: "It depends on the size of the site and the scope. Send me your website and goals and I will reply with a clear proposal." },
+];
 
 // Figures that appear only in the CV and have not been independently verified.
 export const cvClaims = [

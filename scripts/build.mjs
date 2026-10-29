@@ -4,7 +4,7 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { profile, cvClaims, verified, caseStudies, skills, tools, experience, education, courses } from "../src/data.mjs";
+import { profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses } from "../src/data.mjs";
 import { rootCss, assertContrast, fxVars } from "../src/theme.mjs";
 import { heroFx } from "./theme-fx.mjs";
 
@@ -66,15 +66,16 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <header class="site-head"><div class="wrap">
 <a class="logo" href="/">${esc(profile.name)} <span>SEO</span></a>
 <nav class="nav" aria-label="Main">
-<a href="/#results">Results</a><a href="/#case-studies">Case studies</a><a href="/#evidence">Evidence</a><a href="/#skills">Skills</a><a href="/#experience">Experience</a>
+<a href="/services/">Services</a><a href="/#results">Results</a><a href="/#case-studies">Case studies</a><a href="/about/">About</a><a href="/#faq">FAQ</a>
 </nav>
-<a class="btn btn-hero btn-sm" href="/#contact">Contact</a>
+<a class="btn btn-hero btn-sm" href="#contact">Get in touch</a>
 </div></header>
 <main id="main">
 ${body}
 </main>
 <footer class="site-foot"><div class="wrap">
-<p>${esc(profile.name)}, ${esc(profile.title)}. Metrics come from Google Search Console, Google Analytics 4 and Semrush screenshots captured on 28 to 29 Oct 2026. Semrush traffic is a modelled estimate. Client names are withheld until each client approves publication.</p>
+<p>${esc(profile.name)}, ${esc(profile.title)}, Karachi. <a href="/services/">Services</a> &middot; <a href="/about/">About</a> &middot; <a href="${profile.cv}" download>CV</a></p>
+<p>Case study results come from projects delivered as Senior SEO Specialist at Digital Eggheads. Metrics come from Google Search Console, GA4 and Semrush screenshots captured on 28 to 29 Oct 2026; Semrush traffic is a modelled estimate. Client names are withheld until each client approves publication.</p>
 </div></footer>
 <dialog class="lb" id="lb" aria-labelledby="lb-title">
 <img alt="">
@@ -107,52 +108,74 @@ function caseCard(c, i) {
 // A filter is only worth a button if it narrows the list.
 const tagCounts = caseStudies.flatMap((c) => c.tags).reduce((m, t) => m.set(t, (m.get(t) || 0) + 1), new Map());
 const allTags = ["All", ...[...tagCounts].filter(([, n]) => n < caseStudies.length).map(([t]) => t)];
-const gallery = caseStudies.flatMap((c) => c.evidence.map((e) => ({ ...e, c })));
+const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(enquiry.subject)}&body=${encodeURIComponent(enquiry.body)}`;
+const contactButtons = (primary = "Email me about your website") => `<a class="btn btn-hero" href="${mailto}">${esc(primary)}</a>
+${profile.whatsapp ? `<a class="btn btn-hero-ghost" href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener">WhatsApp</a>` : ""}
+${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" rel="me noopener">${esc(l.label)}</a>`).join("")}`;
+const contactBlock = (heading, text) => `<section id="contact"><div class="wrap"><div class="contact rv">
+<h2>${esc(heading)}</h2><p>${esc(text)}</p>
+<div class="cta" style="display:flex;flex-wrap:wrap;gap:12px">${contactButtons()}</div>
+<p class="contact-mail">Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
+</div></div></section>`;
+const band = ({ crumbs, eyebrow, title, lede }) => `<section class="hero-dark case-band">
+${caseFx}
+<div class="wrap"><div class="hero-content" style="max-width:780px">
+<nav class="crumbs rise" aria-label="Breadcrumb"><a href="/">Home</a> / ${crumbs}</nav>
+<span class="eyebrow rise" style="--dl:.06s;margin-top:18px">${esc(eyebrow)}</span>
+<h1>${esc(title)}</h1>
+<p class="lede rise" style="--dl:.16s">${esc(lede)}</p>
+</div></div>
+</section>`;
+const resultCards = verified.map((v, i) => `<div class="stat rv" style="--i:${i}"><span class="badge badge-ok">Verified</span><span class="v">${counter(v.value)}</span><span class="l">${esc(v.label)}</span><span class="d">${esc(v.detail)}</span><a href="/case-studies/${v.caseSlug}/">See the evidence</a><span class="s">${esc(v.source)}</span></div>`).join("\n");
+const steps = () => `<ol class="steps">${processSteps.map((p, i) => `<li class="rv" style="--i:${i}"><time>${i + 1}. ${esc(p.step)}</time><span>${esc(p.text)}</span></li>`).join("")}</ol>`;
+const personLd = {
+  "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, jobTitle: profile.title, email: `mailto:${profile.email}`, url: `${SITE}/`,
+  address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
+  worksFor: { "@type": "Organization", name: "Digital Eggheads" },
+  knowsAbout: ["Search engine optimization", "Technical SEO", "Local SEO", "Structured data", "Answer engine optimization", "Generative engine optimization"],
+  makesOffer: services.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s.name, description: s.outcome } })),
+  sameAs: profile.links.map((l) => l.href),
+};
 
 const home = page({
-  title: `${profile.name}, ${profile.title} | Evidence-based SEO portfolio`,
-  description: `${profile.title} in Karachi with 4+ years across technical, on-page, local, AEO and GEO. Case studies backed by Google Search Console, GA4 and Semrush screenshots.`,
+  title: `${profile.name} | SEO consultant for brands in Pakistan and worldwide`,
+  description: `${profile.title} with 4+ years growing organic traffic and leads through technical SEO, content, local search and AI visibility. Results backed by Search Console and GA4.`,
   pathname: "/",
-  jsonld: {
-    "@context": "https://schema.org", "@type": "ProfilePage", url: `${SITE}/`,
-    mainEntity: { "@type": "Person", name: profile.name, jobTitle: profile.title, email: `mailto:${profile.email}`,
-      address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
-      worksFor: { "@type": "Organization", name: "Digital Eggheads" },
-      knowsAbout: ["Search engine optimization", "Technical SEO", "Local SEO", "Structured data", "Answer engine optimization", "Generative engine optimization"],
-      sameAs: profile.links.map((l) => l.href) },
-  },
+  jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd] },
   body: `
 <section class="hero hero-dark">
-${homeFx}
+${profile.photo ? `${heroFx(false, ["glow", "bars"])}<img class="portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="420" height="520" fetchpriority="high">` : homeFx}
 <div class="wrap"><div class="hero-content">
-<span class="eyebrow rise">${esc(profile.location)} &middot; Open to remote</span>
-<h1>${esc(profile.name)}</h1>
-<p class="role rise" style="--dl:.1s">${esc(profile.title)}</p>
-<p class="tagline rise" style="--dl:.18s">SEO that shows up in the data, not just the deck.</p>
-<p class="lede rise" style="--dl:.24s">${esc(profile.summary)}</p>
-<div class="cta rise" style="--dl:.32s">
-<a class="btn btn-hero" href="#case-studies">View Case Studies</a>
-<a class="btn btn-hero-ghost" href="${profile.cv}" download>Download CV (PDF)</a>
+<p class="wordmark rise">${esc(profile.name)}</p>
+<span class="eyebrow rise" style="--dl:.06s">${esc(profile.title)} &middot; ${esc(profile.location)}</span>
+<h1>${esc(profile.promise)}</h1>
+<p class="lede rise" style="--dl:.2s">${esc(profile.pitch)}</p>
+<div class="cta rise" style="--dl:.3s">
+<a class="btn btn-hero" href="#contact">Get in touch</a>
+<a class="btn btn-hero-ghost" href="#results">See the results</a>
 </div>
-<div class="meta-row rise" style="--dl:.4s"><span>${esc(profile.availability)}</span><span>English, Urdu</span></div>
+<div class="meta-row rise" style="--dl:.38s"><span>4+ years in SEO</span><span>20+ websites managed</span><span>${esc(profile.availability)}</span></div>
 </div></div></section>
 
 <section id="results"><div class="wrap">
-<h2>Verified results</h2>
-<p class="section-intro">Every number below links to a dated screenshot from Google Search Console or GA4. Periods compare 29 Jul to 26 Oct 2026 with the same 90 days in 2025, which removes seasonality.</p>
+<h2>Results from real client work</h2>
+<p class="section-intro">Projects I delivered as Senior SEO Specialist at Digital Eggheads. Client names are withheld, and every figure links to the Search Console or GA4 report it comes from. Periods compare 29 Jul to 26 Oct 2026 with the same 90 days in 2025.</p>
 <div class="stats">
-${verified.map((v, i) => `<div class="stat rv" style="--i:${i}"><span class="badge badge-ok">Verified</span><span class="v">${counter(v.value)}</span><span class="l">${esc(v.label)}</span><span class="d">${esc(v.detail)}</span><a href="/case-studies/${v.caseSlug}/">See the evidence</a><span class="s">${esc(v.source)}</span></div>`).join("\n")}
+${resultCards}
 </div>
-<h3 style="margin-top:34px">From my CV</h3>
-<p class="section-intro">These figures come from my CV. Analytics access for the earlier role is no longer available, so they are labelled CV-reported rather than verified.</p>
-<div class="stats">
-${cvClaims.map((v, i) => `<div class="stat cv rv" style="--i:${i}"><span class="badge badge-warn">CV-reported</span><span class="v">${esc(v.value)}</span><span class="d">${esc(v.label)}</span></div>`).join("\n")}
+</div></section>
+
+<section id="services"><div class="wrap">
+<h2>How I can help</h2>
+<p class="section-intro">Pick one piece or combine them. Every engagement starts from your own data.</p>
+<div class="grid-3">
+${services.map((s, i) => `<a class="svc rv" style="--i:${i % 3}" href="/services/#${s.id}"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></span><h3>${esc(s.name)}</h3><p>${esc(s.outcome)}</p><span class="more-link">What is included</span></a>`).join("\n")}
 </div>
 </div></section>
 
 <section id="case-studies"><div class="wrap">
 <h2>Case studies</h2>
-<p class="section-intro">Client work delivered at Digital Eggheads. Each study lists what I did, when, the before and after numbers, and what the evidence cannot prove.</p>
+<p class="section-intro">What the problem was, what I changed and when, the before and after numbers, and what the evidence cannot prove.</p>
 <div class="filters" role="group" aria-label="Filter case studies">
 ${allTags.map((t, i) => `<button type="button" data-filter="${esc(t)}" aria-pressed="${i === 0}">${esc(t)}</button>`).join("")}
 </div>
@@ -162,49 +185,94 @@ ${caseStudies.map(caseCard).join("\n")}
 <p id="filter-status" class="section-intro" aria-live="polite"></p>
 </div></section>
 
-<section id="evidence"><div class="wrap">
-<h2>Evidence gallery</h2>
-<p class="section-intro">Unedited report screenshots, cropped to remove client names, account details and navigation. Select any image to open it at full size.</p>
-<div class="gallery">
-${gallery.map((e, i) => `<figure class="rv" style="--i:${i % 2}">
-<a href="/images/evidence/${e.file}.webp" data-lb>${img(e.file, `${e.platform}: ${e.report}, ${e.c.label}`)}</a>
-<figcaption><strong>${esc(e.c.label)} &middot; ${esc(e.platform)}</strong>${esc(e.caption)}<span class="src">${esc(e.report)} &middot; ${esc(e.period)}</span></figcaption>
-</figure>`).join("\n")}
+<section id="process"><div class="wrap">
+<h2>How we work together</h2>
+${steps()}
+</div></section>
+
+<section id="why"><div class="wrap">
+<h2>What you can expect</h2>
+<div class="promise-grid">
+${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></div>`).join("\n")}
+</div>
+<div class="two" style="margin-top:22px">
+<div class="panel rv"><h3>Who I work with</h3><ul>${audiences.map((a) => `<li>${esc(a)}</li>`).join("")}</ul></div>
+<div class="panel rv" style="--i:1"><h3>Industries I have worked in</h3><ul class="tools" style="margin:6px 0 0">${industries.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
 </div>
 </div></section>
 
-<section id="skills"><div class="wrap">
-<h2>Skills</h2>
+<section id="about-teaser"><div class="wrap"><div class="exp">
+<div class="exp-main rv">
+<div class="big"><b>4+</b><span>Years of<br>SEO experience</span></div>
+<h2>Meet Moiz</h2>
+<p>I am a Senior SEO Specialist based in Karachi. I have managed end-to-end SEO for more than 20 websites, from local clinics to e-commerce stores and software companies, across technical, on-page, off-page, local and AI search.</p>
+<a class="btn btn-hero" href="/about/">More about me</a>
+</div>
+<div class="exp-side">
+<div class="rv"><b>20+</b><span>Websites managed</span></div>
+<div class="rv" style="--i:1"><b>${industries.length}</b><span>Industries worked in</span></div>
+<div class="rv" style="--i:2"><b>4</b><span>Countries targeted: Pakistan, Australia, UK, US</span></div>
+<div class="rv" style="--i:3"><b>3</b><span>Data sources behind every report: GSC, GA4, Semrush</span></div>
+</div>
+</div></div></section>
+
+<section id="faq"><div class="wrap">
+<h2>Questions clients ask</h2>
+<div class="faq">${faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
+</div></section>
+
+${contactBlock("Tell me about your website", "Send your website and what you want more of. I will look at it and reply with what I see and how I would approach it.")}
+`,
+});
+
+const servicesPage = page({
+  title: `SEO services: audits, technical, content, local and AI search | ${profile.name}`,
+  description: "SEO audits, technical SEO and migrations, content strategy, local SEO and Google Business Profile, AI search visibility and ongoing SEO management.",
+  pathname: "/services/",
+  jsonld: { "@context": "https://schema.org", "@graph": [personLd, ...services.map((s) => ({ "@type": "Service", name: s.name, description: s.outcome, provider: { "@id": `${SITE}/#person` } }))] },
+  body: `
+${band({ crumbs: "Services", eyebrow: "Services", title: "SEO services that start from your data", lede: "Every engagement begins with your own Search Console and GA4, so we agree on the starting point before any work begins." })}
+<div class="wrap">
+${services.map((s) => `<section id="${s.id}" class="svc-detail rv"><div><h2>${esc(s.name)}</h2><p class="lede-sm">${esc(s.outcome)}</p><a href="/case-studies/${s.proof.slug}/">${esc(s.proof.label)}</a></div>
+<div class="panel"><h3>What is included</h3><ul>${s.includes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div></section>`).join("\n")}
+<section><h2>How we work together</h2>
+${steps()}</section>
+</div>
+${contactBlock("Not sure which service you need?", "Send me your website and goals. I will tell you where I would start and why.")}`,
+});
+
+const aboutPage = page({
+  title: `About ${profile.name}, ${profile.title}`,
+  description: `${profile.name} is a ${profile.title} in Karachi with 4+ years of experience and 20+ websites managed across technical, on-page, local, AEO and GEO.`,
+  pathname: "/about/",
+  jsonld: { "@context": "https://schema.org", "@type": "ProfilePage", url: `${SITE}/about/`, mainEntity: personLd },
+  body: `
+${band({ crumbs: "About", eyebrow: `${profile.title} · ${profile.location}`, title: "About Moiz", lede: profile.summary })}
+<div class="wrap">
+<section><h2>How I approach SEO</h2>
+<div class="prose rv"><p>I care about the numbers a business owner can check: clicks, sessions, leads and calls in their own accounts. That is why every result on this site links to the report it comes from, and why I label anything I cannot verify.</p>
+<p>Most of my recent work is in healthcare and other sensitive topics, where accuracy and trust signals matter as much as keywords. I also work with local businesses, e-commerce stores and software companies.</p></div></section>
+
+<section><h2>Experience</h2>
+<div class="timeline">
+${experience.map((j) => `<div class="job rv"><h3>${esc(j.role)}, ${esc(j.org)}</h3><div class="when">${esc(j.period)}</div><ul>${j.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul></div>`).join("\n")}
+</div></section>
+
+<section><h2>Skills</h2>
 <div class="grid-3">
-${skills.map((s, i) => `<div class="panel rv" style="--i:${i % 3}"><h3>${esc(s.group)}</h3><ul>${s.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("\n")}
+${skills.map((s, i) => `<div class="panel rv" style="--i:${i % 3}"><h3>${esc(s.group)}</h3><ul>${s.items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("\n")}
 </div>
 <h3 style="margin-top:30px">Tools and platforms</h3>
 <ul class="tools">${tools.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
-</div></section>
+</section>
 
-<section id="experience"><div class="wrap">
-<h2>Experience</h2>
-<div class="timeline">
-${experience.map((j) => `<div class="job rv"><h3>${esc(j.role)}, ${esc(j.org)}</h3><div class="when">${esc(j.period)}</div><ul>${j.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul></div>`).join("\n")}
+<section><div class="two">
+<div class="panel rv"><h3>Education</h3><ul>${education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)} (${esc(e.period)})</li>`).join("")}</ul></div>
+<div class="panel rv" style="--i:1"><h3>Courses</h3><ul>${courses.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}</li>`).join("")}</ul></div>
 </div>
-<div class="two" style="margin-top:16px">
-<div class="panel"><h3>Education</h3><ul>${education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)} (${esc(e.period)})</li>`).join("")}</ul></div>
-<div class="panel"><h3>Courses</h3><ul>${courses.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}</li>`).join("")}</ul></div>
+<p style="margin-top:18px"><a href="${profile.cv}" download>Download my CV (PDF)</a></p></section>
 </div>
-</div></section>
-
-<section id="contact"><div class="wrap">
-<div class="contact rv">
-<h2>Hiring for SEO?</h2>
-<p>I am looking for SEO roles with agencies and in-house teams in Pakistan, and remote roles with international companies. I can walk you through any of these reports live.</p>
-<div class="cta" style="display:flex;flex-wrap:wrap;gap:12px">
-<a class="btn btn-hero" href="mailto:${profile.email}?subject=SEO%20role">Email ${esc(profile.email)}</a>
-<a class="btn btn-hero-ghost" href="${profile.cv}" download>Download CV (PDF)</a>
-${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" rel="me noopener">${esc(l.label)}</a>`).join("")}
-</div>
-</div>
-</div></section>
-`,
+${contactBlock("Want to work together?", "Tell me about your website and what you want more of.")}`,
 });
 
 function casePage(c) {
@@ -255,24 +323,27 @@ ${caseFx}
 
 <section><div class="note rv"><h2>Limits of this evidence</h2><ul>${c.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div></section>
 
-<section style="padding-top:0"><div class="contact rv"><h2>Want the full walkthrough?</h2><p>I can take you through these reports and the work behind them in an interview.</p>
-<div style="display:flex;flex-wrap:wrap;gap:12px"><a class="btn btn-hero" href="mailto:${profile.email}?subject=SEO%20role">Email me</a><a class="btn btn-hero-ghost" href="/#case-studies">More case studies</a></div></div></section>
-</div>`,
+</div>
+${contactBlock("Want results like this for your brand?", "Send me your website and what you want more of. I will reply with what I see and how I would approach it.")}`,
   });
 }
 
-const notFound = page({ title: `Page not found | ${profile.name}`, description: "This page does not exist.", pathname: "/404", body: `<section class="hero"><div class="wrap"><h1>Page not found</h1><p class="lede">That page does not exist. The case studies are on the <a href="/">home page</a>.</p></div></section>` });
+const notFound = page({ title: `Page not found | ${profile.name}`, description: "This page does not exist.", pathname: "/404", body: `<section class="hero"><div class="wrap"><h1>Page not found</h1><p class="lede">That page does not exist. Try the <a href="/">home page</a> or the <a href="/services/">services</a>.</p></div></section>` });
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(path.join(root, "public"), dist, { recursive: true });
 await writeFile(path.join(dist, "index.html"), home);
+for (const [dir, html] of [["services", servicesPage], ["about", aboutPage]]) {
+  await mkdir(path.join(dist, dir), { recursive: true });
+  await writeFile(path.join(dist, dir, "index.html"), html);
+}
 await writeFile(path.join(dist, "404.html"), notFound.replace(/<link rel="canonical"[^>]+>\n/, '<meta name="robots" content="noindex">\n'));
 for (const c of caseStudies) {
   await mkdir(path.join(dist, "case-studies", c.slug), { recursive: true });
   await writeFile(path.join(dist, "case-studies", c.slug, "index.html"), casePage(c));
 }
-const urls = ["/", ...caseStudies.map((c) => `/case-studies/${c.slug}/`)];
+const urls = ["/", "/services/", "/about/", ...caseStudies.map((c) => `/case-studies/${c.slug}/`)];
 await writeFile(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${BUILT}</lastmod></url>`).join("\n")}\n</urlset>\n`);
 await writeFile(path.join(dist, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 

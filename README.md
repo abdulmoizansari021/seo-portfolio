@@ -1,6 +1,6 @@
 # Abdul Moiz Ansari: SEO portfolio
 
-An evidence-based portfolio for a Senior SEO Specialist. It is a static site: one Node build script turns `src/data.mjs` into plain HTML pages in `dist/`. No framework, no runtime dependencies and almost no JavaScript.
+A client-facing SEO portfolio: it shows brand owners what I do (services), proof from real client data (case studies), how I work, and one clear way to get in touch. It is a static site: one Node build script turns `src/data.mjs` into plain HTML pages in `dist/`. No framework, no runtime dependencies and almost no JavaScript.
 
 ## Structure
 
@@ -71,7 +71,17 @@ No other environment variables are used, so there is no `.env.example`.
 3. Redeploy so canonicals and the sitemap use the new domain.
 4. Add the domain to Google Search Console and submit `/sitemap.xml`.
 
+## Pages
+
+`/` home (promise, verified results, services, case studies, process, FAQ, contact), `/services/`, `/about/` (experience, skills, CV download) and one page per case study.
+
 ## Updating content
+
+Optional fields in `profile` (in `src/data.mjs`):
+
+- `photo`: a portrait in `public/` (for example `/images/moiz.webp`, about 840x1040). It replaces the hero graph on desktop.
+- `whatsapp`: a number in international format (for example `923001234567`) adds a WhatsApp button next to email.
+- `links`: profile links such as LinkedIn, shown in every contact block.
 
 Edit `src/data.mjs`, then build. Each metric has `source` and `period` fields; keep them accurate. To add a contact link (for example LinkedIn), add `{ label: "LinkedIn", href: "https://..." }` to `profile.links`.
 
