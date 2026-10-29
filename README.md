@@ -91,13 +91,16 @@ Client names are withheld and the screenshots are cropped so no domain, property
 
 ## Theme and motion
 
-The site uses Theme 2, Modern Emerald, chosen from the local theme gallery (it replaced Theme 1, Midnight Navy). Colours live only in `src/theme.mjs`; the hero layers are picked in `scripts/build.mjs` (home: glow, growth bars, graph; case pages: glow).
+The live design is "Studio" (29 Oct 2026): a light layout with one coral accent (#cf2e2e, lighter #ff6b5e in dark mode), a condensed display face (Barlow Semi Condensed, self-hosted in `public/fonts/` with preload; SIL Open Font License in `public/fonts/OFL.txt`) and a three-column hero. It replaced Modern Emerald and Midnight Navy, which remain in the git history and the theme gallery. Colours live only in `src/theme.mjs`; layout and motion for this design are in `src/studio.css`.
 
-- Effects use CSS transforms and opacity, so they cause no layout shift. The headline is painted on the first frame.
-- Count-up animation runs only on verified figures; the final value is in the HTML for search engines and screen readers.
-- Decorative animation pauses when the tab is hidden or the hero is off screen.
-- `prefers-reduced-motion` turns off all movement: content shows immediately and the graph is drawn statically.
-- Content is fully visible without JavaScript.
+Motion, all plain CSS and a few lines of JavaScript, no libraries:
+
+- Header tightens and gains a shadow on scroll; nav links get an underline sweep.
+- Section titles rise in word by word; cards and list rows fade or slide in as they enter the screen.
+- Outlined words under the hero drift with page scroll (CSS scroll timeline, static where unsupported).
+- Service icons flip on hover; services rows fill with the accent; case screenshots zoom in on reveal.
+- Verified figures count up; a back-to-top button shows scroll progress.
+- `prefers-reduced-motion` turns all of it off, and content is fully visible without JavaScript.
 
 To reopen the theme gallery locally (it is excluded from the Vercel build):
 
@@ -113,11 +116,13 @@ Then open http://localhost:4173/theme-preview/.
 
 ## Measured performance
 
-Lighthouse 12.8.2, mobile emulation, local build, 29 Oct 2026, after applying Modern Emerald (two runs per page):
+Lighthouse 12.8.2, mobile emulation with simulated slow 4G, local build, 29 Oct 2026, Studio design with self-hosted fonts:
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|
-| Home | 100 | 100 | 100 | 100 | 1.2 to 1.3 s | 0 |
-| Case B | 100 | 100 | 100 | 100 | 1.3 s | 0 |
+| Home | 100 | 100 | 100 | 100 | 1.4 s | 0 |
+| Services | 100 | 100 | 100 | 100 | 1.5 s | 0 |
+| About | 100 | 100 | 100 | 100 | 1.5 s | 0 |
+| Case A | 98 | 100 | 100 | 100 | 2.0 s | 0 |
 
-The home page is about 14 KB gzipped including all CSS and JavaScript. Re-run Lighthouse against the deployed URL for production figures.
+Self-hosting the font (one 23 KB preloaded file; the 600 weight loads only if a page uses it) cut home LCP from 2.8 s with Google Fonts to 1.4 s. Re-run Lighthouse against the deployed URL for production figures.

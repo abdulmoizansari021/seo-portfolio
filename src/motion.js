@@ -99,4 +99,37 @@
     lb.querySelector("[data-lb-close]").addEventListener("click", () => lb.close());
     lb.addEventListener("close", () => { img.removeAttribute("src"); if (opener) opener.focus(); });
   }
+
+  // Split marked titles into words so they can rise in one after another. Text stays real text.
+  document.querySelectorAll(".split").forEach((el) => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.textContent = "";
+    words.forEach((w, i) => {
+      const outer = document.createElement("span"), inner = document.createElement("span");
+      outer.className = "w";
+      inner.textContent = w;
+      inner.style.setProperty("--wi", i);
+      outer.append(inner);
+      el.append(outer, i < words.length - 1 ? " " : "");
+    });
+    io.observe(el);
+  });
+
+  // Header shadow and back-to-top progress, both driven by one passive scroll handler.
+  const head = document.querySelector(".site-head");
+  const top = document.querySelector(".to-top");
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      head && head.classList.toggle("scrolled", y > 10);
+      if (top) { top.classList.toggle("show", y > 500); top.style.setProperty("--p", max > 0 ? (y / max).toFixed(3) : 0); }
+      ticking = false;
+    });
+  };
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  top && top.addEventListener("click", () => scrollTo({ top: 0, behavior: motion() ? "smooth" : "auto" }));
 })();

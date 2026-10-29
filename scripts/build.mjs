@@ -23,7 +23,8 @@ const css = [
   rootCss(),
   await readFile(path.join(root, "src/styles.css"), "utf8"),
   await readFile(path.join(root, "src/motion.css"), "utf8"),
-  `.hero-dark{${Object.entries(fxVars).map(([k, v]) => `--${k}:${v}`).join(";")}}`,
+  await readFile(path.join(root, "src/studio.css"), "utf8"),
+  `.hero-dark,.studio-hero{${Object.entries(fxVars).map(([k, v]) => `--${k}:${v}`).join(";")}}`,
 ].map(minify).join("\n");
 const motionJs = await readFile(path.join(root, "src/motion.js"), "utf8");
 // Modern Emerald hero layers; the case pages use the calmer glow only.
@@ -55,8 +56,9 @@ function page({ title, description, pathname, body, jsonld }) {
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#0f2a1f">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/barlow-semi-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>${css}</style>
 <script>document.documentElement.classList.add("js")</script>
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ""}
@@ -64,11 +66,11 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-head"><div class="wrap">
-<a class="logo" href="/">${esc(profile.name)} <span>SEO</span></a>
+<a class="logo" href="/"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 20l5-5 4 4 6-7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>${esc(profile.name)}</a>
 <nav class="nav" aria-label="Main">
 <a href="/services/">Services</a><a href="/#results">Results</a><a href="/#case-studies">Case studies</a><a href="/about/">About</a><a href="/#faq">FAQ</a>
 </nav>
-<a class="btn btn-hero btn-sm" href="#contact">Get in touch</a>
+<a class="btn btn-hero btn-sm" href="#contact">Get in touch <span class="arr" aria-hidden="true">&rarr;</span></a>
 </div></header>
 <main id="main">
 ${body}
@@ -81,6 +83,7 @@ ${body}
 <img alt="">
 <div class="lb-bar"><div><strong id="lb-title" data-lb-title></strong><span data-lb-cap></span></div><button type="button" class="btn btn-ghost btn-sm" data-lb-close>Close</button></div>
 </dialog>
+<button type="button" class="to-top" aria-label="Back to top"><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="track" cx="24" cy="24" r="22"/><circle class="prog" cx="24" cy="24" r="22" pathLength="1"/></svg><svg class="up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>${motionJs}</script>
 </body>
 </html>
@@ -96,11 +99,10 @@ function caseCard(c, i) {
 <div class="more" aria-hidden="true"><b>What I did</b>${c.actions.slice(0, 3).map((a) => `<span>${esc(a.date)}: ${esc(a.text.split(/[.:]\s/)[0])}</span>`).join("")}</div></div>
 <div class="body">
 <span class="kicker">${esc(c.label)} &middot; ${esc(c.industry)} &middot; ${esc(c.market)}</span>
-<h3><a href="/case-studies/${c.slug}/">${esc(c.title)}</a></h3>
+<div class="title-row"><h3><a href="/case-studies/${c.slug}/">${esc(c.title)}</a></h3><a class="arrow-btn" href="/case-studies/${c.slug}/" aria-label="Read ${esc(c.label)}: ${esc(c.title)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
 <p>${esc(c.summary)}</p>
 <ul class="chips">${c.tags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
 <div class="mini">${headlineMetrics(c).map((m) => `<div><b>${esc(m.change)}</b><span>${esc(m.name)}, ${esc(m.source.split(" ")[0])}</span></div>`).join("")}</div>
-<a href="/case-studies/${c.slug}/">Read the case study<span class="sr"> for ${esc(c.label)}</span></a>
 </div>
 </article></div></div>`;
 }
@@ -127,7 +129,14 @@ ${caseFx}
 </div></div>
 </section>`;
 const resultCards = verified.map((v, i) => `<div class="stat rv" style="--i:${i}"><span class="badge badge-ok">Verified</span><span class="v">${counter(v.value)}</span><span class="l">${esc(v.label)}</span><span class="d">${esc(v.detail)}</span><a href="/case-studies/${v.caseSlug}/">See the evidence</a><span class="s">${esc(v.source)}</span></div>`).join("\n");
-const steps = () => `<ol class="steps">${processSteps.map((p, i) => `<li class="rv" style="--i:${i}"><time>${i + 1}. ${esc(p.step)}</time><span>${esc(p.text)}</span></li>`).join("")}</ol>`;
+const steps = () => `<ol class="num-cards">${processSteps.map((p, i) => `<li class="rv" style="--i:${i}"><h3><span class="num">${String(i + 1).padStart(2, "0")}.</span>${esc(p.step)}</h3><p>${esc(p.text)}</p></li>`).join("")}</ol>`;
+const head = (kicker, title, intro = "", center = false) => `<div class="sec-head${center ? " center" : ""}"><span class="kicker-sm">${esc(kicker)}</span><h2 class="split">${esc(title)}</h2>${intro ? `<p class="section-intro">${esc(intro)}</p>` : ""}</div>`;
+const icon = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const socialLinks = () => [
+  `<a href="${mailto}" aria-label="Email">${icon('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>')}</a>`,
+  profile.whatsapp ? `<a href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener" aria-label="WhatsApp">${icon('<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5l1.2-1.2 2 1-.5 1.7c-3.6.4-7.6-3.6-7.2-7.2l1.7-.5 1 2z"/>')}</a>` : "",
+  ...profile.links.map((l) => `<a href="${esc(l.href)}" rel="me noopener" aria-label="${esc(l.label)}">${icon('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>')}</a>`),
+].join("");
 const personLd = {
   "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, jobTitle: profile.title, email: `mailto:${profile.email}`, url: `${SITE}/`,
   address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
@@ -143,55 +152,63 @@ const home = page({
   pathname: "/",
   jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd] },
   body: `
-<section class="hero hero-dark">
-${profile.photo ? `${heroFx(false, ["glow", "bars"])}<img class="portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="420" height="520" fetchpriority="high">` : homeFx}
-<div class="wrap"><div class="hero-content">
-<p class="wordmark rise">${esc(profile.name)}</p>
-<span class="eyebrow rise" style="--dl:.06s">${esc(profile.title)} &middot; ${esc(profile.location)}</span>
-<h1>${esc(profile.promise)}</h1>
-<p class="lede rise" style="--dl:.2s">${esc(profile.pitch)}</p>
-<div class="cta rise" style="--dl:.3s">
-<a class="btn btn-hero" href="#contact">Get in touch</a>
-<a class="btn btn-hero-ghost" href="#results">See the results</a>
+<section class="studio-hero">
+<div class="outline-band" aria-hidden="true"><div class="row"><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span></div></div>
+<div class="wrap hero-grid">
+<div class="hero-left">
+<span class="hello rise">Hello, I am</span>
+<h1 class="hero-name">${esc(profile.name)}</h1>
+<p class="hero-role rise" style="--dl:.1s">${esc(profile.title)}</p>
+<p class="hero-promise rise" style="--dl:.18s">${esc(profile.promise)}. ${esc(profile.pitch)}</p>
+<div class="cta rise" style="--dl:.26s"><a class="btn btn-hero" href="#contact">Get in touch <span class="arr" aria-hidden="true">&rarr;</span></a><a class="btn btn-hero-ghost" href="#results">See the results</a></div>
 </div>
-<div class="meta-row rise" style="--dl:.38s"><span>4+ years in SEO</span><span>20+ websites managed</span><span>${esc(profile.availability)}</span></div>
-</div></div></section>
+<div class="hero-visual rise" style="--dl:.12s">
+<span class="ring r1" aria-hidden="true"></span><span class="ring r2" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+${profile.photo
+  ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="380" height="460" fetchpriority="high">`
+  : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
+</div>
+<div class="hero-right rise" style="--dl:.22s">
+<h2>About me</h2>
+<p>I help brands get more <strong>leads and sales from search</strong>, with every result tracked in their own Search Console and GA4. ${esc(profile.availability)}.</p>
+<h2>Find me</h2>
+<div class="socials">${socialLinks()}</div>
+<div class="hero-facts"><div><b>4+</b><span>Years in SEO</span></div><div><b>20+</b><span>Websites managed</span></div></div>
+</div>
+</div></section>
 
 <section id="results"><div class="wrap">
-<h2>Results from real client work</h2>
-<p class="section-intro">Projects I delivered as Senior SEO Specialist at Digital Eggheads. Client names are withheld, and every figure links to the Search Console or GA4 report it comes from. Periods compare 29 Jul to 26 Oct 2026 with the same 90 days in 2025.</p>
+${head("Proof", "Results from real client work", "Projects I delivered as Senior SEO Specialist at Digital Eggheads. Client names are withheld, and every figure links to the Search Console or GA4 report it comes from. Periods compare 29 Jul to 26 Oct 2026 with the same 90 days in 2025.")}
 <div class="stats">
 ${resultCards}
 </div>
 </div></section>
 
 <section id="services"><div class="wrap">
-<h2>How I can help</h2>
-<p class="section-intro">Pick one piece or combine them. Every engagement starts from your own data.</p>
+${head("Services", "How I can help", "Pick one piece or combine them. Every engagement starts from your own data.", true)}
 <div class="grid-3">
-${services.map((s, i) => `<a class="svc rv" style="--i:${i % 3}" href="/services/#${s.id}"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></span><h3>${esc(s.name)}</h3><p>${esc(s.outcome)}</p><span class="more-link">What is included</span></a>`).join("\n")}
+${services.map((s, i) => `<a class="svc rv" style="--i:${i % 3}" href="/services/#${s.id}"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${s.icon}</svg></span><h3>${esc(s.name)}</h3><p>${esc(s.outcome)}</p><span class="more-link">Learn more</span></a>`).join("\n")}
 </div>
 </div></section>
 
 <section id="case-studies"><div class="wrap">
-<h2>Case studies</h2>
-<p class="section-intro">What the problem was, what I changed and when, the before and after numbers, and what the evidence cannot prove.</p>
+${head("Case studies", "Real problems, measured results", "What the problem was, what I changed and when, the before and after numbers, and what the evidence cannot prove.", true)}
 <div class="filters" role="group" aria-label="Filter case studies">
 ${allTags.map((t, i) => `<button type="button" data-filter="${esc(t)}" aria-pressed="${i === 0}">${esc(t)}</button>`).join("")}
 </div>
-<div class="cards" id="cards">
+<div class="cards stagger" id="cards">
 ${caseStudies.map(caseCard).join("\n")}
 </div>
 <p id="filter-status" class="section-intro" aria-live="polite"></p>
 </div></section>
 
 <section id="process"><div class="wrap">
-<h2>How we work together</h2>
+${head("Process", "How we work together")}
 ${steps()}
 </div></section>
 
 <section id="why"><div class="wrap">
-<h2>What you can expect</h2>
+${head("Why me", "What you can expect")}
 <div class="promise-grid">
 ${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></div>`).join("\n")}
 </div>
@@ -216,8 +233,13 @@ ${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p
 </div>
 </div></div></section>
 
+<section id="tools"><div class="wrap">
+${head("Toolkit", "Tools I work with every day", "", true)}
+<ul class="tool-grid">${tools.slice(0, 12).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+</div></section>
+
 <section id="faq"><div class="wrap">
-<h2>Questions clients ask</h2>
+${head("FAQ", "Questions clients ask")}
 <div class="faq">${faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
 </div></section>
 
@@ -233,9 +255,11 @@ const servicesPage = page({
   body: `
 ${band({ crumbs: "Services", eyebrow: "Services", title: "SEO services that start from your data", lede: "Every engagement begins with your own Search Console and GA4, so we agree on the starting point before any work begins." })}
 <div class="wrap">
+<section style="padding-bottom:10px">${head("What I offer", "Six ways I can help your brand grow")}
+<ul class="svc-rows">${services.map((s, i) => `<li class="rv from-left" style="--i:${i}"><a href="#${s.id}"><span class="ic">${icon(s.icon)}</span><b>${esc(s.name)}</b><span class="desc">${esc(s.outcome)}</span><span class="go">Details &rarr;</span></a></li>`).join("")}</ul></section>
 ${services.map((s) => `<section id="${s.id}" class="svc-detail rv"><div><h2>${esc(s.name)}</h2><p class="lede-sm">${esc(s.outcome)}</p><a href="/case-studies/${s.proof.slug}/">${esc(s.proof.label)}</a></div>
 <div class="panel"><h3>What is included</h3><ul>${s.includes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div></section>`).join("\n")}
-<section><h2>How we work together</h2>
+<section>${head("Process", "How we work together")}
 ${steps()}</section>
 </div>
 ${contactBlock("Not sure which service you need?", "Send me your website and goals. I will tell you where I would start and why.")}`,

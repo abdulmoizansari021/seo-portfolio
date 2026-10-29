@@ -1,22 +1,24 @@
-// Live site palette: Theme 2, Modern Emerald (chosen 29 Oct 2026 from the theme gallery; replaced Midnight Navy).
-// build.mjs writes these into :root and fails the build if any text pair drops below 4.5:1.
-
-const shared = { hero: "#0f2a1f", "hero-ink": "#f7f6f1", "hero-muted": "#b9c9bf", "hero-accent": "#34d399" };
+// Live site palette: "Studio", a light portfolio style with one coral accent (29 Oct 2026).
+// Replaced Modern Emerald. build.mjs writes these into :root and fails the build below 4.5:1.
+// hero* tokens style the hero, header and case bands; in Studio they match the page surface.
 
 export const light = {
-  ...shared,
-  bg: "#f7f6f1", surface: "#ffffff", "surface-2": "#ecefe8", ink: "#0f2a1f", text: "#2b3b33", muted: "#5a6b62", line: "#dde3dc",
-  brand: "#047857", "brand-ink": "#ffffff", up: "#047857", "up-bg": "#e1f3ea", warn: "#8a5a00", "warn-bg": "#fff4dc",
+  bg: "#ffffff", surface: "#ffffff", "surface-2": "#f4f4f5", ink: "#141416", text: "#3a3a40", muted: "#5f5f66", line: "#e4e4e7",
+  brand: "#cf2e2e", "brand-ink": "#ffffff", up: "#141416", "up-bg": "#ececee", warn: "#8a5a00", "warn-bg": "#fff4dc",
+  hero: "#ffffff", "hero-ink": "#141416", "hero-muted": "#5f5f66", "hero-accent": "#cf2e2e",
 };
 
 export const dark = {
-  ...shared,
-  bg: "#08140f", surface: "#0e1f18", "surface-2": "#142a21", ink: "#eef5f0", text: "#c3d3c9", muted: "#93a89b", line: "#1f3a2e",
-  brand: "#34d399", "brand-ink": "#08140f", up: "#34d399", "up-bg": "#0c2a1f", warn: "#fbbf24", "warn-bg": "#2a210c",
+  bg: "#0f0f10", surface: "#19191b", "surface-2": "#202023", ink: "#f5f5f6", text: "#d4d4d8", muted: "#a1a1aa", line: "#2c2c30",
+  brand: "#ff6b5e", "brand-ink": "#0f0f10", up: "#f5f5f6", "up-bg": "#26262a", warn: "#fbbf24", "warn-bg": "#2a210c",
+  hero: "#0f0f10", "hero-ink": "#f5f5f6", "hero-muted": "#a1a1aa", "hero-accent": "#ff6b5e",
 };
 
-// Motion settings for the Modern Emerald effects (glow, growth bars, graph).
-export const fxVars = { "glow-o": ".30", "grid-o": "0", "grid-size": "40px", spd: "1" };
+// The contact block stays dark in both modes; its local palette is checked too.
+export const contactDark = { hero: "#141416", "hero-ink": "#ffffff", "hero-muted": "#c4c4c9", "hero-accent": "#ff6b5e" };
+
+// Motion settings for the Studio hero (a faint glow on case bands, graph card on home).
+export const fxVars = { "glow-o": ".10", "grid-o": "0", "grid-size": "40px", spd: "1" };
 
 export const contrastPairs = [
   ["text", "bg"], ["text", "surface"], ["muted", "bg"], ["muted", "surface"], ["muted", "surface-2"], ["ink", "surface"],
@@ -39,7 +41,7 @@ export const rootCss = () => `:root{${block(light)};color-scheme:light}
 
 export const assertContrast = () => {
   const fails = [];
-  for (const [mode, t] of [["light", light], ["dark", dark]]) for (const [f, b] of contrastPairs) {
+  for (const [mode, t] of [["light", light], ["dark", dark], ["contact", { ...light, ...contactDark }]]) for (const [f, b] of contrastPairs) {
     const r = contrast(t[f], t[b]);
     if (r < 4.5) fails.push(`${mode}: ${f} on ${b} is ${r.toFixed(2)}:1`);
   }
