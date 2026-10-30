@@ -273,9 +273,9 @@ section { padding: 64px 0; }
 .studio-hero.hero-banner :focus-visible { outline-color: #ff6b5e; }
 .studio-hero.hero-banner .outline-band { -webkit-text-stroke: 1.6px rgba(255, 107, 94, .55); }
 .studio-hero.hero-banner .outline-band .dim { -webkit-text-stroke-color: rgba(255, 255, 255, .16); }
-.studio-hero.hero-banner .hero-cutout { height: clamp(380px, 62vh, 540px); max-width: none; -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+.studio-hero.hero-banner .hero-cutout { height: clamp(460px, 80vh, 640px); max-width: none; -webkit-mask-image: linear-gradient(to bottom, #000 66%, transparent 98%); mask-image: linear-gradient(to bottom, #000 66%, transparent 98%); }
 .studio-hero.hero-banner .hero-name { font-size: clamp(3rem, 6.4vw, 5.3rem); }
-@media (max-width: 979px) { .studio-hero.hero-banner .hero-cutout { height: 340px; } }
+@media (max-width: 979px) { .studio-hero.hero-banner .hero-cutout { height: 440px; } }
 
 .banner-fx { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .banner-fx .glow { position: absolute; border-radius: 50%; }
