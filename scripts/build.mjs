@@ -215,7 +215,7 @@ ${profile.cutout ? bannerFx : ""}
 </div>
 <div class="hero-visual">
 ${profile.cutout
-  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" srcset="${esc(profile.cutoutSmall)} 420w, ${esc(profile.cutout)} 700w" sizes="(min-width: 980px) 440px, 300px" alt="${esc(profile.name)}, ${esc(profile.title)}" width="700" height="1020" fetchpriority="high" decoding="async">`
+  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" srcset="${esc(profile.cutoutSmall)} 420w, ${esc(profile.cutout)} 700w" sizes="(min-width: 980px) 440px, 300px" alt="${esc(profile.name)}, ${esc(profile.title)}" width="700" height="923" fetchpriority="high" decoding="async">`
   : profile.photo
     ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="346" height="346" fetchpriority="high" decoding="async">`
     : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
