@@ -224,3 +224,37 @@ section { padding: 64px 0; }
 .menu-panel .btn { justify-content: center; }
 .menu-mail { margin: 0; text-align: center; font-size: .9rem; }
 @media (prefers-reduced-motion: reduce) { .menu-panel.open { animation: none; } .menu-btn path { transition: none; } }
+
+/* even case study grid: equal card heights, metrics and labels aligned at the bottom */
+.cards.even { display: grid; gap: 28px; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 760px) { .cards.even { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .cards.even { grid-template-columns: repeat(3, 1fr); } }
+.cards.even .cw, .cards.even .gb { display: flex; }
+.cards.even .card { display: flex; flex-direction: column; flex: 1; background: transparent; border: 0; box-shadow: none; overflow: visible; }
+.cards.even .shot { border: 1px solid var(--line); border-radius: 20px; padding: 12px; background: var(--surface); overflow: hidden; }
+.cards.even .shot img { border-radius: 12px; aspect-ratio: 1122 / 520; object-fit: cover; object-position: top left; width: 100%; height: auto; }
+.cards.even .more { border-radius: 20px; }
+.cards.even .body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: 16px 4px 0; }
+.cards.even .title-row h3 { font-size: 1.3rem; line-height: 1.2; min-height: 2.4em; }
+.cards.even .body > p { margin: 0; color: var(--muted); font-size: .95rem; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.cards.even .mini { margin-top: auto; }
+.mini small { display: block; font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.cmp-types { margin: 0; font-size: .78rem; color: var(--muted); }
+.cmp-types span { color: var(--ink); font-weight: 600; }
+
+/* comparison label inside results tables */
+.cmp-chip { display: inline-block; margin: 0 0 4px; padding: 2px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink); font-size: .74rem; font-weight: 600; }
+.src-cell .cmp-chip { margin-right: 6px; }
+@media (max-width: 640px) { .src-cell .cmp-chip { display: table; margin-bottom: 6px; } }
+
+/* case page: challenge and role side by side, evidence frames of equal height */
+.case-two { display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .case-two { grid-template-columns: 1fr 1fr; } }
+.case-two .panel { padding: 24px; }
+.case-two h2 { font-size: 1.6rem; margin-bottom: 10px; }
+.case-two p { margin: 0; }
+.gallery { align-items: stretch; }
+.gallery figure { display: flex; flex-direction: column; }
+.gallery figure a { aspect-ratio: 16 / 7.2; display: grid; place-items: center; background: #fff; padding: 8px; border-bottom: 1px solid var(--line); }
+.gallery figure a img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+.gallery figcaption { flex: 1; }

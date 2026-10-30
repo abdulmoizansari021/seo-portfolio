@@ -4,9 +4,10 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses } from "../src/data.mjs";
+import { COMPARE, profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses } from "../src/data.mjs";
 import { rootCss, assertContrast, fxVars } from "../src/theme.mjs";
 import { heroFx } from "./theme-fx.mjs";
+import { readFileSync } from "node:fs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -38,8 +39,15 @@ const counter = (value) => {
   return `<span aria-hidden="true" data-count="${m[2]}" data-dec="${dec}" data-prefix="${m[1]}" data-suffix="${m[3]}">${esc(value)}</span><span class="sr">${esc(value)}</span>`;
 };
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const img = (file, alt, { eager = false, sizes = "(min-width: 760px) 50vw, 100vw" } = {}) =>
-  `<img src="/images/evidence/${file}-720.webp" srcset="/images/evidence/${file}-720.webp 720w, /images/evidence/${file}.webp ${file.includes("semrush") ? 810 : file.includes("ga4") ? 1440 : 1122}w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="720" height="${file.includes("semrush") ? 498 : file.includes("ga4_traffic") ? 302 : file.includes("ga4") ? 292 : file.startsWith("case-d") ? 295 : 304}">`;
+const SIZES = JSON.parse(readFileSync(new URL("../src/evidence-sizes.json", import.meta.url), "utf8"));
+const img = (file, alt, { eager = false, sizes = "(min-width: 760px) 50vw, 100vw" } = {}) => {
+  const d = SIZES[file];
+  if (!d) throw new Error(`No size recorded for evidence image ${file}`);
+  const srcset = d.w > d.w720 ? ` srcset="/images/evidence/${file}-720.webp ${d.w720}w, /images/evidence/${file}.webp ${d.w}w" sizes="${sizes}"` : "";
+  return `<img src="/images/evidence/${file}-720.webp"${srcset} alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="${d.w720}" height="${d.h720}">`;
+};
+const SHORT = { yoy: "year on year", m3: "3 months vs previous", m6: "6 months vs previous", d60: "60 days vs previous", since: "since May 2026" };
+const typeOf = (m) => m.type || "yoy";
 
 function page({ title, description, pathname, body, jsonld }) {
   const url = `${SITE}${pathname}`;
@@ -96,7 +104,13 @@ ${body}
 `;
 }
 
-const headlineMetrics = (c) => c.metrics.filter((m) => m.change.startsWith("+") || m.change.includes("better")).slice(0, 2);
+const headlineMetrics = (c) => {
+  const good = c.metrics.filter((m) => m.change.startsWith("+") || m.change.includes("better"));
+  const picked = [];
+  for (const m of good) if (picked.length < 2 && !picked.some((p) => typeOf(p) === typeOf(m))) picked.push(m);
+  for (const m of good) if (picked.length < 2 && !picked.includes(m)) picked.push(m);
+  return picked;
+};
 
 function caseCard(c, i) {
   const ev = c.evidence[0];
@@ -108,7 +122,8 @@ function caseCard(c, i) {
 <div class="title-row"><h3><a href="/case-studies/${c.slug}/">${esc(c.title)}</a></h3><a class="arrow-btn" href="/case-studies/${c.slug}/" aria-label="Read ${esc(c.label)}: ${esc(c.title)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
 <p>${esc(c.summary)}</p>
 <ul class="chips">${c.tags.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
-<div class="mini">${headlineMetrics(c).map((m) => `<div><b>${esc(m.change)}</b><span>${esc(m.name)}, ${esc(m.source.split(" ")[0])}</span></div>`).join("")}</div>
+<div class="mini">${headlineMetrics(c).map((m) => `<div><b>${esc(m.change)}</b><span>${esc(m.name)}</span><small>${esc(m.source.split(" ")[0])}, ${esc(SHORT[typeOf(m)])}</small></div>`).join("")}</div>
+<p class="cmp-types"><span>Compared:</span> ${[...new Set(c.metrics.map(typeOf))].map((t) => esc(COMPARE[t])).join(" &middot; ")}</p>
 </div>
 </article></div></div>`;
 }
@@ -182,7 +197,7 @@ ${profile.cutout
 </div></section>
 
 <section id="results"><div class="wrap">
-${head("Proof", "Results from real client work", "Projects I delivered as Senior SEO Specialist at Digital Eggheads. Client names are withheld, and every figure links to the Search Console or GA4 report it comes from. Periods compare 29 Jul to 26 Oct 2026 with the same 90 days in 2025.")}
+${head("Proof", "Results from real client work", "Projects I delivered as Senior SEO Specialist at Digital Eggheads. Client names are withheld, and every figure links to the Search Console or GA4 report it comes from. Each card says which periods it compares: year on year, back-to-back months, or equal windows in Google's new AI features report.")}
 <div class="stats">
 ${resultCards}
 </div>
@@ -200,7 +215,7 @@ ${head("Case studies", "Real problems, measured results", "What the problem was,
 <div class="filters" role="group" aria-label="Filter case studies">
 ${allTags.map((t, i) => `<button type="button" data-filter="${esc(t)}" aria-pressed="${i === 0}">${esc(t)}</button>`).join("")}
 </div>
-<div class="cards stagger" id="cards">
+<div class="cards even" id="cards">
 ${caseStudies.map(caseCard).join("\n")}
 </div>
 <p id="filter-status" class="section-intro" aria-live="polite"></p>
@@ -330,13 +345,15 @@ ${caseFx}
 
 <section style="padding-top:20px"><h2>Results</h2>
 <div class="table-wrap rv"><table>
-<thead><tr><th scope="col">Metric</th><th scope="col">Before (2025)</th><th scope="col">After (2026)</th><th scope="col">Change</th><th scope="col">Source and period</th></tr></thead>
-<tbody>${c.metrics.map((m) => `<tr><th scope="row" style="color:var(--ink);text-transform:none;letter-spacing:0;font-size:.93rem">${esc(m.name)}</th><td data-label="Before">${esc(m.before)}</td><td data-label="After">${esc(m.after)}</td><td class="up" data-label="Change">${esc(m.change)}</td><td class="src-cell">${esc(m.source)}<br><small>${esc(m.period)}</small></td></tr>`).join("")}</tbody>
+<thead><tr><th scope="col">Metric</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Change</th><th scope="col">Comparison and source</th></tr></thead>
+<tbody>${c.metrics.map((m) => `<tr><th scope="row" style="color:var(--ink);text-transform:none;letter-spacing:0;font-size:.93rem">${esc(m.name)}</th><td data-label="Before">${esc(m.before)}</td><td data-label="After">${esc(m.after)}</td><td class="up" data-label="Change">${esc(m.change)}</td><td class="src-cell"><span class="cmp-chip">${esc(COMPARE[typeOf(m)])}</span>${esc(m.source)}<br><small>${esc(m.period)}</small></td></tr>`).join("")}</tbody>
 </table></div>
 </section>
 
-<section><h2>The challenge</h2><p style="max-width:75ch">${esc(c.challenge)}</p>
-<h2 style="margin-top:28px">My role</h2><p style="max-width:75ch">${esc(c.role)}</p></section>
+<section><div class="case-two">
+<div class="panel rv"><h2>The challenge</h2><p>${esc(c.challenge)}</p></div>
+<div class="panel rv" style="--i:1"><h2>My role</h2><p>${esc(c.role)}</p></div>
+</div></section>
 
 <section><h2>What I did</h2>
 <ol class="steps">${c.actions.map((a, i) => `<li class="rv" style="--i:${i}"><time>${esc(a.date)}</time><span>${esc(a.text)}</span></li>`).join("")}</ol>

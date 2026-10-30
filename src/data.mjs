@@ -109,13 +109,19 @@ export const cvClaims = [
 
 // Verified headline numbers, each linked to a case study and a screenshot.
 export const verified = [
-  { value: "+107.8%", label: "Organic Search sessions", detail: "GA4, Case A, 9,181 to 19,074", source: "GA4 Traffic acquisition, 29 Jul to 26 Oct 2026 vs 29 Jul to 26 Oct 2025", caseSlug: "healthcare-ngo-organic-growth" },
-  { value: "+83%", label: "Google Search clicks", detail: "GSC, Case C, 458 to 838", source: "GSC Performance, 29 Jul to 26 Oct 2026 vs same period 2025", caseSlug: "surgical-practice-site-rebuild" },
-  { value: "13.4 to 7.6", label: "Average Google position", detail: "GSC, Case B, moved onto page one", source: "GSC Performance, 29 Jul to 26 Oct 2026 vs same period 2025", caseSlug: "interventional-radiology-visibility" },
-  { value: "+36%", label: "Google Search clicks", detail: "GSC, Case A, about 15.4k to 21k", source: "GSC Performance, 29 Jul to 26 Oct 2026 vs same period 2025", caseSlug: "healthcare-ngo-organic-growth" },
+  { value: "+107.8%", label: "Organic Search sessions", detail: "GA4, Case A, 9,181 to 19,074", source: "Year on year: 29 Jul to 26 Oct 2026 vs the same days in 2025", caseSlug: "healthcare-ngo-organic-growth" },
+  { value: "+69.2%", label: "Google Search clicks", detail: "GSC, Case E, 26.3k to 44.5k", source: "Last 6 months vs previous 6: 28 Apr to 26 Oct 2026 vs 28 Oct 2025 to 27 Apr 2026", caseSlug: "nonprofit-skills-training-growth" },
+  { value: "+27.0%", label: "Organic Search sessions", detail: "GA4, Case A, 15,014 to 19,074", source: "Last 3 months vs previous 3: 29 Jul to 26 Oct vs 30 Apr to 28 Jul 2026", caseSlug: "healthcare-ngo-organic-growth" },
+  { value: "+55.2%", label: "AI features impressions", detail: "GSC, Case F, 69.6k to 108k", source: "Last 60 days vs previous 60: 28 Aug to 26 Oct vs 29 Jun to 27 Aug 2026", caseSlug: "uk-furniture-ai-search-visibility" },
 ];
 
 const PERIOD = "29 Jul to 26 Oct 2026 compared with 29 Jul to 26 Oct 2025";
+// Period-over-period windows (equal length, back to back), so results are not only year on year.
+const P3M = "29 Jul to 26 Oct 2026 compared with 30 Apr to 28 Jul 2026";
+const P6M = "28 Apr to 26 Oct 2026 compared with 28 Oct 2025 to 27 Apr 2026";
+const P60D = "28 Aug to 26 Oct 2026 compared with 29 Jun to 27 Aug 2026";
+// Comparison labels shown beside each metric.
+export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began" };
 
 export const caseStudies = [
   {
@@ -144,11 +150,16 @@ export const caseStudies = [
       { name: "Engaged organic sessions", before: "6,051", after: "11,532", change: "+90.6%", source: "GA4 Traffic acquisition", period: PERIOD },
       { name: "Google Search clicks", before: "15.4k", after: "21k", change: "+36%", source: "GSC Performance (web)", period: PERIOD },
       { name: "Average position", before: "11.1", after: "7.5", change: "3.6 places better", source: "GSC Performance (web)", period: PERIOD },
+      { name: "Organic Search sessions", before: "15,014", after: "19,074", change: "+27.0%", source: "GA4 Traffic acquisition", period: P3M, type: "m3" },
+      { name: "Engaged organic sessions", before: "8,698", after: "11,532", change: "+32.6%", source: "GA4 Traffic acquisition", period: P3M, type: "m3" },
+      { name: "Google Search clicks", before: "18.1k", after: "21k", change: "+16.0%", source: "GSC Performance (web)", period: P3M, type: "m3" },
     ],
     evidence: [
       { file: "case-a_ga4_traffic-acquisition_yoy_2026-07-29_2026-10-26", platform: "GA4", report: "Traffic acquisition: session primary channel group", period: PERIOD, caption: "Organic Search row: 19,074 sessions vs 9,181 (+107.76%), engaged sessions 11,532 vs 6,051 (+90.58%)." },
       { file: "case-a_ga4_sessions-by-channel-chart_2026-07-29_2026-10-26", platform: "GA4", report: "Sessions by channel over time", period: PERIOD, caption: "Daily sessions by channel for the current period, with the comparison period dotted." },
       { file: "case-a_gsc_performance_yoy_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, Search results, compare mode", period: PERIOD, caption: "Clicks 21k vs 15.4k, average position 7.5 vs 11.1." },
+      { file: "case-a_ga4_traffic-acquisition_3m-vs-prev-3m_2026-07-29_2026-10-26", platform: "GA4", report: "Traffic acquisition, last 3 months vs previous 3", period: P3M, caption: "Organic Search 19,074 sessions vs 15,014 (+27.04%), engaged sessions 11,532 vs 8,698 (+32.58%), engagement rate 60.46% vs 57.93%." },
+      { file: "case-a_gsc_performance_3m-vs-prev-3m_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, last 3 months vs previous 3", period: P3M, caption: "Clicks 21k vs 18.1k, average position 7.5 vs 7.9." },
       { file: "case-a_semrush_domain-overview-pk_1y_2026-10-28", platform: "Semrush (estimate)", report: "Domain Overview, Pakistan database, 1 year", period: "Nov 2025 to 28 Oct 2026", caption: "Estimated organic traffic and ranking keywords trend upward across the year. Semrush figures are modelled estimates, not measured visits." },
     ],
     limitations: [
@@ -185,12 +196,16 @@ export const caseStudies = [
       { name: "Average position", before: "13.4", after: "7.6", change: "5.8 places better", source: "GSC Performance (web)", period: PERIOD },
       { name: "Impressions", before: "298k", after: "476k", change: "+59.7%", source: "GSC Performance (web)", period: PERIOD },
       { name: "Google Search clicks", before: "5.03k", after: "5.77k", change: "+14.7%", source: "GSC Performance (web)", period: PERIOD },
+      { name: "Google Search clicks", before: "10.9k", after: "12.4k", change: "+13.8%", source: "GSC Performance (web)", period: P6M, type: "m6" },
+      { name: "Click-through rate", before: "0.9%", after: "1.2%", change: "+0.3 points", source: "GSC Performance (web)", period: P6M, type: "m6" },
     ],
     evidence: [
       { file: "case-b_gsc_performance_yoy_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, Search results, compare mode", period: PERIOD, caption: "Clicks 5.77k vs 5.03k, impressions 476k vs 298k, average position 7.6 vs 13.4." },
+      { file: "case-b_gsc_performance_6m-vs-prev-6m_2026-04-28_2026-10-26", platform: "Google Search Console", report: "Performance, last 6 months vs previous 6", period: P6M, caption: "Clicks 12.4k vs 10.9k, CTR 1.2% vs 0.9%. Impressions 1.04m vs 1.19m and average position 7.8 vs 6.7 moved the other way." },
       { file: "case-b_semrush_domain-overview-pk_1y_2026-10-28", platform: "Semrush (estimate)", report: "Domain Overview, Pakistan database, 1 year", period: "Nov 2025 to 28 Oct 2026", caption: "Estimated organic traffic and keyword count over the year. Semrush figures are modelled estimates, not measured visits." },
     ],
     limitations: [
+      "On the 6-month comparison, clicks and CTR rose but impressions fell (1.19m to 1.04m) and average position slipped (6.7 to 7.8), so ranking gains show only in the year-on-year view.",
       "CTR fell from 1.7% to 1.2%, so clicks grew more slowly than impressions. Part of this is consistent with AI Overviews answering informational queries on the results page.",
       "No GA4 property for this site is available in the account used for this portfolio, so on-site engagement is not shown.",
       "GSC totals above 1,000 are rounded in the Search Console interface. The 2025 baseline predates the documented work, and the content team also published posts during the period.",
@@ -221,11 +236,15 @@ export const caseStudies = [
       { name: "Google Search clicks", before: "458", after: "838", change: "+83.0%", source: "GSC Performance (web)", period: PERIOD },
       { name: "Impressions", before: "24k", after: "55.4k", change: "+130.8%", source: "GSC Performance (web)", period: PERIOD },
       { name: "Average position", before: "8", after: "8", change: "Held steady", source: "GSC Performance (web)", period: PERIOD },
+      { name: "Google Search clicks", before: "1.53k", after: "1.92k", change: "+25.5%", source: "GSC Performance (web)", period: P6M, type: "m6" },
+      { name: "Impressions", before: "113k", after: "120k", change: "+6.2%", source: "GSC Performance (web)", period: P6M, type: "m6" },
     ],
     evidence: [
       { file: "case-c_gsc_performance_yoy_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, Search results, compare mode", period: PERIOD, caption: "Clicks 838 vs 458, impressions 55.4k vs 24k, average position 8 in both periods." },
+      { file: "case-c_gsc_performance_6m-vs-prev-6m_2026-04-28_2026-10-26", platform: "Google Search Console", report: "Performance, last 6 months vs previous 6", period: P6M, caption: "Clicks 1.92k vs 1.53k, impressions 120k vs 113k, CTR 1.6% vs 1.4%." },
     ],
     limitations: [
+      "Over the last 3 months against the 3 before, clicks fell (838 vs 1.07k) as the rebuild went live, so the gains above come from the year-on-year and 6-month views.",
       "My documented work on this site began in September 2026, so much of the comparison window predates it. The result shows that visibility kept growing through a URL-changing rebuild; it is not claimed that the redirects alone caused the year-on-year growth.",
       "The GA4 property was created recently and has no 2025 baseline. Semrush's estimated traffic for the domain declined over the year, so it is not presented as supporting evidence.",
       "Client name withheld pending publication approval.",
@@ -264,6 +283,79 @@ export const caseStudies = [
       "The window starts four days after the schema work. Over the shorter 29 Jul to 26 Oct comparison used for the other case studies, the gain is smaller: clicks +15% and average position 12.7 to 8.6.",
       "Search visibility had already started rising in late 2025, before the documented work, so part of the year-on-year gain predates it. Most clicks still come from informational articles; the recommended collection pages had not been built at the time of writing.",
       "GSC totals above 1,000 are rounded in the Search Console interface. GA4 is not available for this store in the account used here, so no sales or conversion claims are made.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
+  {
+    slug: "nonprofit-skills-training-growth",
+    label: "Case E",
+    title: "Search growth for a national skills-training non-profit",
+    client: "Vocational training non-profit, Pakistan (network of technical institutes)",
+    industry: "Education and non-profit",
+    market: "Pakistan",
+    tags: ["Non-profit", "Education", "Schema", "AEO and GEO"],
+    summary:
+      "A large vocational training non-profit whose structured data had no organisation identity at all. Over the last six months, Google Search clicks grew 69% and impressions 80% against the six months before, and its pages appeared about 252,000 times in Google's AI features.",
+    challenge:
+      "The SEO plugin produced basic page and breadcrumb markup, but there was no organisation node anywhere: no logo, address, contact points, social profiles or non-profit identity. None of the campuses or courses were described in structured data either.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I audited the structured data, then designed, deployed and validated the new schema. Site content was managed by the client.",
+    actions: [
+      { date: "13 Jul 2026", text: "Audited the existing structured data and confirmed there was no Organization node on any page." },
+      { date: "13 Jul 2026", text: "Designed and deployed site-wide JSON-LD describing the organisation as an NGO and educational organisation, with founding date, registration details, contact points, social profiles and a donate action." },
+      { date: "13 Jul 2026", text: "Added a list of 15 campuses to the institutes page and Course markup to the technical (15 courses), advanced (8) and emerging technology course pages, then validated all five pages live." },
+    ],
+    metrics: [
+      { name: "Google Search clicks", before: "26.3k", after: "44.5k", change: "+69.2%", source: "GSC Performance (web)", period: P6M, type: "m6" },
+      { name: "Impressions", before: "666k", after: "1.2m", change: "+80.2%", source: "GSC Performance (web)", period: P6M, type: "m6" },
+      { name: "AI features impressions", before: "No data", after: "252k", change: "Since 18 May 2026", source: "GSC Generative AI features", period: "18 May to 26 Oct 2026 (the report has no earlier data)", type: "since" },
+    ],
+    evidence: [
+      { file: "case-e_gsc_performance_6m-vs-prev-6m_2026-04-28_2026-10-26", platform: "Google Search Console", report: "Performance, last 6 months vs previous 6", period: P6M, caption: "Clicks 44.5k vs 26.3k, impressions 1.2m vs 666k, CTR 3.7% vs 4%, average position 6 vs 5." },
+      { file: "case-e_gsc_ai-features_since-2026-05-18", platform: "Google Search Console", report: "Generative AI features (beta)", period: "18 May to 26 Oct 2026", caption: "252k impressions in Google's AI features since the report began on 18 May 2026, rising from under 1k a day to around 2k a day." },
+    ],
+    limitations: [
+      "Most of the click growth arrived in late May and June 2026, before the documented schema work on 13 July, so the schema cannot explain that jump. The result shows the site's overall trajectory during the engagement, not the effect of one change.",
+      "Over the last 3 months against the 3 before, clicks were flat (22k vs 22k): the growth has levelled off since July.",
+      "CTR slipped from 4.0% to 3.7% and average position from 5 to 6 as impressions grew faster than clicks.",
+      "The AI features report only has data from 18 May 2026, so there is no fair earlier comparison. On equal 60-day windows, AI impressions were about level (94.3k to 98.8k). Google reports impressions only for this view, not clicks.",
+      "GSC totals above 1,000 are rounded in the Search Console interface. No GA4 access for this site, so no sessions or conversion claims.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
+  {
+    slug: "uk-furniture-ai-search-visibility",
+    label: "Case F",
+    title: "Rising in Google and AI search for a UK furniture brand",
+    client: "Bespoke furniture brand, United Kingdom (WooCommerce)",
+    industry: "E-commerce",
+    market: "United Kingdom",
+    tags: ["E-commerce", "AEO and GEO", "Technical SEO", "Content strategy"],
+    summary:
+      "A luxury bespoke furniture store that was blocking AI crawlers. Over the last three months, clicks rose 15% and average position improved from 15 to 11.8 against the three months before, and impressions in Google's AI features grew 55% over the last 60 days.",
+    challenge:
+      "The audit found the site's robots.txt opted out of AI crawlers (including Google-Extended, GPTBot and ClaudeBot) and blocked SEO tools, while a firewall refused non-browser crawlers. The blog had many posts but no plan for which to rewrite and which were simply losing clicks to AI answers.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I ran the technical and content audit and the Search Console analysis of the blog, and wrote the prioritised recommendations.",
+    actions: [
+      { date: "Jun 2026", text: "Technical and content audit: documented the robots.txt rules blocking AI crawlers and SEO tools and the firewall refusing crawlers, and planned topic clusters for sofas, beds, made-to-measure, buying guides and the London showroom." },
+      { date: "Aug 2026", text: "Analysed the blog in Search Console to separate posts that need a rewrite from posts losing clicks to AI Overviews, and delivered a prioritised rewrite list." },
+    ],
+    metrics: [
+      { name: "Google Search clicks", before: "5.47k", after: "6.27k", change: "+14.6%", source: "GSC Performance (web)", period: P3M, type: "m3" },
+      { name: "Average position", before: "15", after: "11.8", change: "3.2 places better", source: "GSC Performance (web)", period: P3M, type: "m3" },
+      { name: "AI features impressions", before: "69.6k", after: "108k", change: "+55.2%", source: "GSC Generative AI features", period: P60D, type: "d60" },
+    ],
+    evidence: [
+      { file: "case-f_gsc_performance_3m-vs-prev-3m_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, last 3 months vs previous 3", period: P3M, caption: "Clicks 6.27k vs 5.47k, CTR 0.6% vs 0.5%, average position 11.8 vs 15. Impressions 1.05m vs 1.1m." },
+      { file: "case-f_gsc_ai-features_trend_since-2026-05-18", platform: "Google Search Console", report: "Generative AI features (beta), full history", period: "18 May to 26 Oct 2026", caption: "Daily impressions in Google's AI features, rising from under 1k to about 3k a day since late September." },
+      { file: "case-f_gsc_ai-features_60d-vs-prev-60d_2026-08-28_2026-10-26", platform: "Google Search Console", report: "Generative AI features, 60 days vs previous 60", period: P60D, caption: "AI features impressions 108k vs 69.6k on two complete 60-day windows." },
+    ],
+    limitations: [
+      "Over six months the picture is weaker: clicks fell from 18.4k to 11.9k against the six months before, so the recent three months are a recovery after that decline.",
+      "This portfolio does not document which recommendations the store implemented, so the gains cannot be tied to specific changes.",
+      "The AI features report starts on 18 May 2026. Two full 60-day windows are compared because a 3-month comparison would include only about 70 days of AI data in the earlier window and overstate the growth. Google reports impressions only for this view.",
+      "Total impressions were roughly level (1.1m to 1.05m). GSC totals above 1,000 are rounded. No GA4 access for this store.",
       "Client name withheld pending publication approval.",
     ],
   },
