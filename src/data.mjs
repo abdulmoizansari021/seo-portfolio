@@ -20,10 +20,11 @@ export const profile = {
   // Optional: a WhatsApp number in international format (for example "923001234567") adds a WhatsApp button.
   whatsapp: "",
   // Optional: path to a portrait in public/ (for example "/images/moiz.webp"). It replaces the hero graph on desktop.
-  photo: "/images/moiz-ansari.webp",
+  photo: "/images/moiz-ansari-round.webp",
   // Background-removed portrait for the home hero (falls back to the round photo).
-  cutout: "/images/moiz-ansari-cutout.webp",
-  avatar: "/images/moiz-ansari-112.webp",
+  cutout: "/images/moiz-ansari-suit-700.webp",
+  cutoutSmall: "/images/moiz-ansari-suit-420.webp",
+  avatar: "/images/moiz-ansari-round-168.webp",
 };
 
 // Prefilled email so a prospect sends the details needed for a first reply.

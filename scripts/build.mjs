@@ -31,6 +31,37 @@ const motionJs = await readFile(path.join(root, "src/motion.js"), "utf8");
 // Modern Emerald hero layers; the case pages use the calmer glow only.
 const homeFx = heroFx(false, ["glow", "bars", "graph"]);
 const caseFx = heroFx(true, ["glow"]);
+// Banner decoration: curved wireframe meshes, a node network and drifting particles (all aria-hidden).
+const meshSvg = (cls, rows, cols, amp) => {
+  const lines = [];
+  for (let i = 0; i <= rows; i++) {
+    let d = "";
+    for (let j = 0; j <= 40; j++) {
+      const x = (j / 40) * 600, y = 40 + i * (320 / rows) + Math.sin(j / 40 * Math.PI * 1.6 + i * 0.35) * amp * (1 - i / (rows * 1.6));
+      d += `${j ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+    lines.push(`<path d="${d}"/>`);
+  }
+  for (let j = 0; j <= cols; j++) {
+    let d = "";
+    for (let i = 0; i <= 20; i++) {
+      const t = i / 20, x = (j / cols) * 600 + Math.sin(t * Math.PI) * 30, y = 40 + t * 320 + Math.sin((j / cols) * Math.PI * 1.6 + t * 2) * amp * 0.6;
+      d += `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+    lines.push(`<path d="${d}"/>`);
+  }
+  return `<svg class="mesh ${cls}" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true">${lines.join("")}</svg>`;
+};
+const particles = Array.from({ length: 26 }, (_, i) => {
+  const x = (i * 37.3) % 100, y = (i * 61.7) % 100, s = 2 + (i % 3), dl = (i * 0.37) % 4;
+  return `<i style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${s}px;height:${s}px;animation-delay:-${dl.toFixed(2)}s"></i>`;
+}).join("");
+const bannerFx = `<div class="banner-fx" aria-hidden="true">
+<span class="glow g1"></span><span class="glow g2"></span><span class="glow g3"></span>
+${meshSvg("m-left", 16, 18, 46)}${meshSvg("m-right", 18, 20, 60)}
+${heroFx(false, ["net"]).replace('<div class="fx-scrim"></div>', "")}
+<div class="sparks">${particles}</div>
+</div>`;
 // Verified figures such as "+107.8%" count up; anything else renders as plain text.
 const counter = (value) => {
   const m = /^(\+?)(\d+(?:\.\d+)?)(%?)$/.exec(value);
@@ -173,7 +204,8 @@ const home = page({
   pathname: "/",
   jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd] },
   body: `
-<section class="studio-hero${profile.cutout ? " has-cutout" : ""}">
+<section class="studio-hero${profile.cutout ? " has-cutout hero-banner" : ""}">
+${profile.cutout ? bannerFx : ""}
 <div class="outline-band" aria-hidden="true"><div class="row"><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span><span>SEO SPECIALIST</span><span class="dim">ORGANIC GROWTH</span></div></div>
 <div class="wrap hero-grid">
 <div class="hero-left">
@@ -183,7 +215,7 @@ const home = page({
 </div>
 <div class="hero-visual">
 ${profile.cutout
-  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="241" height="346" fetchpriority="high" decoding="async">`
+  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" srcset="${esc(profile.cutoutSmall)} 420w, ${esc(profile.cutout)} 700w" sizes="(min-width: 980px) 340px, 260px" alt="${esc(profile.name)}, ${esc(profile.title)}" width="700" height="1242" fetchpriority="high" decoding="async">`
   : profile.photo
     ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="346" height="346" fetchpriority="high" decoding="async">`
     : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
@@ -239,7 +271,7 @@ ${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p
 
 <section id="about-teaser"><div class="wrap"><div class="exp">
 <div class="exp-main rv">
-<div class="big"><b>4+</b><span>Years of<br>SEO experience</span>${profile.avatar ? `<img class="avatar" src="${esc(profile.avatar)}" alt="" width="112" height="112" loading="lazy" decoding="async">` : ""}</div>
+<div class="big"><b>4+</b><span>Years of<br>SEO experience</span>${profile.avatar ? `<img class="avatar" src="${esc(profile.avatar)}" alt="" width="168" height="168" loading="lazy" decoding="async">` : ""}</div>
 <h2>Meet Moiz</h2>
 <p>I am a Senior SEO Specialist based in Karachi. I have managed end-to-end SEO for more than 20 websites, from local clinics to e-commerce stores and software companies, across technical, on-page, off-page, local and AI search.</p>
 <a class="btn btn-hero" href="/about/">More about me</a>
@@ -292,7 +324,7 @@ const aboutPage = page({
   body: `
 ${band({ crumbs: "About", eyebrow: `${profile.title} · ${profile.location}`, title: "About Moiz", lede: profile.summary })}
 <div class="wrap">
-<section class="about-intro">${profile.photo ? `<img class="about-photo rv" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="346" height="346" loading="lazy" decoding="async">` : ""}<div><h2>How I approach SEO</h2>
+<section class="about-intro">${profile.photo ? `<img class="about-photo rv" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="600" height="600" loading="lazy" decoding="async">` : ""}<div><h2>How I approach SEO</h2>
 <div class="prose rv"><p>I care about the numbers a business owner can check: clicks, sessions, leads and calls in their own accounts. That is why every result on this site links to the report it comes from, and why I label anything I cannot verify.</p>
 <p>Most of my recent work is in healthcare and other sensitive topics, where accuracy and trust signals matter as much as keywords. I also work with local businesses, e-commerce stores and software companies.</p></div></div></section>
 
