@@ -80,7 +80,7 @@ No other environment variables are used, so there is no `.env.example`.
 Optional fields in `profile` (in `src/data.mjs`):
 
 - `photo`: round portrait used on About and in the experience panel (`/images/moiz-ansari-round.webp`, 600 px).
-- `cutout` and `cutoutSmall`: the supplied transparent head-to-hips suit portrait in the dark home banner (700 and 420 px wide, trimmed from a 1677x2000 cut-out, otherwise unchanged).
+- `cutout` and `cutoutSmall` (images are cached as immutable for a year, so give a replacement photo a new file name): the supplied transparent head-to-hips suit portrait in the dark home banner (700 and 420 px wide, trimmed from a 1677x2000 cut-out, otherwise unchanged).
 - `avatar`: small round version (168 px).
 - `whatsapp`: a number in international format (for example `923001234567`) adds a WhatsApp button next to email.
 - `links`: profile links such as LinkedIn, shown in every contact block.
