@@ -4,7 +4,7 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { COMPARE, profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses } from "../src/data.mjs";
+import { COMPARE, profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses, landings } from "../src/data.mjs";
 import { rootCss, assertContrast, fxVars } from "../src/theme.mjs";
 import { heroFx } from "./theme-fx.mjs";
 import { readFileSync } from "node:fs";
@@ -138,7 +138,7 @@ ${ld ? `<script type="application/ld+json">${JSON.stringify(ld)}</script>` : ""}
 ${body}
 </main>
 <footer class="site-foot"><div class="wrap">
-<p>${esc(profile.name)}, ${esc(profile.title)}, Karachi. <a href="/services/">Services</a> &middot; <a href="/about/">About</a> &middot; <a href="${profile.cv}" download>CV</a></p>
+<p>${esc(profile.name)}, ${esc(profile.title)}, Karachi. <a href="/services/">Services</a> &middot; ${landings.map((l) => `<a href="/${l.slug}/">${esc(l.crumb)}</a> &middot; `).join("")}<a href="/about/">About</a> &middot; <a href="${profile.cv}" download>CV</a></p>
 <p>Case study results come from projects delivered as Senior SEO Specialist at Digital Eggheads. Metrics come from Google Search Console, GA4 and Semrush screenshots captured on 28 to 29 Oct 2026; Semrush traffic is a modelled estimate. Client names are withheld until each client approves publication.</p>
 </div></footer>
 <dialog class="lb" id="lb" aria-labelledby="lb-title">
@@ -338,6 +338,8 @@ ${band({ crumbs: "Services", eyebrow: "Services", title: "SEO services in Karach
 <ul class="svc-rows">${services.map((s, i) => `<li class="rv from-left" style="--i:${i}"><a href="#${s.id}"><span class="ic">${icon(s.icon)}</span><b>${esc(s.name)}</b><span class="desc">${esc(s.outcome)}</span><span class="go">Details &rarr;</span></a></li>`).join("")}</ul></section>
 ${services.map((s) => `<section id="${s.id}" class="svc-detail rv"><div><h2>${esc(s.name)}</h2><p class="lede-sm">${esc(s.outcome)}</p><a href="/case-studies/${s.proof.slug}/">${esc(s.proof.label)}</a></div>
 <div class="panel"><h3>What is included</h3><ul>${s.includes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div></section>`).join("\n")}
+<section>${head("Specialist SEO", "SEO for your business type")}
+<div class="grid-3">${landings.map((l, i) => `<div class="panel rv" style="--i:${i}"><h3><a href="/${l.slug}/">${esc(l.h1)}</a></h3><p>${esc(l.description)}</p></div>`).join("")}</div></section>
 <section>${head("Process", "How we work together")}
 ${steps()}</section>
 </div>
@@ -439,13 +441,46 @@ ${contactBlock("Want results like this for your brand?", "Send me your website a
   });
 }
 
+function landingPage(l) {
+  const url = `${SITE}/${l.slug}/`;
+  return page({
+    title: l.title,
+    description: l.description,
+    pathname: `/${l.slug}/`,
+    crumb: l.crumb,
+    jsonld: { "@context": "https://schema.org", "@graph": [
+      { "@type": "Service", "@id": `${url}#service`, name: l.h1, serviceType: l.crumb, description: l.description, url,
+        provider: { "@id": `${SITE}/#person` }, areaServed: [{ "@type": "City", name: "Karachi" }, { "@type": "Country", name: "Pakistan" }] },
+      { "@type": "FAQPage", mainEntity: l.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+    ] },
+    body: `
+${band({ crumbs: esc(l.crumb), eyebrow: l.eyebrow, title: l.h1, lede: l.lede })}
+<div class="wrap">
+${l.sections.map((s) => `<section class="rv"><h2>${esc(s.h2)}</h2><div class="prose">${s.paras.map((p) => `<p>${esc(p)}</p>`).join("")}</div></section>`).join("\n")}
+<section><div class="panel rv"><h2>${esc(l.includesTitle)}</h2><ul>${l.includes.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+<p><a href="/services/">See all SEO services</a></p></div></section>
+<section>${head("Process", "How we work together")}
+${steps()}</section>
+</div>
+<section id="case-studies"><div class="wrap">
+${head("Proof", "Related case studies", l.proofIntro, true)}
+<div class="cards even">${caseStudies.filter((c) => l.cases.includes(c.slug)).map(caseCard).join("\n")}</div>
+</div></section>
+<section id="faq"><div class="wrap">
+${head("FAQ", "Questions clients ask")}
+<div class="faq">${l.faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
+</div></section>
+${contactBlock("Tell me about your business", "Send me your website and what you want more of. I will reply with what I see and where I would start.")}`,
+  });
+}
+
 const notFound = page({ title: `Page not found | ${profile.name}`, description: "This page does not exist.", pathname: "/404", body: `<section class="hero"><div class="wrap"><h1>Page not found</h1><p class="lede">That page does not exist. Try the <a href="/">home page</a> or the <a href="/services/">services</a>.</p></div></section>` });
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(path.join(root, "public"), dist, { recursive: true });
 await writeFile(path.join(dist, "index.html"), home);
-for (const [dir, html] of [["services", servicesPage], ["about", aboutPage]]) {
+for (const [dir, html] of [["services", servicesPage], ["about", aboutPage], ...landings.map((l) => [l.slug, landingPage(l)])]) {
   await mkdir(path.join(dist, dir), { recursive: true });
   await writeFile(path.join(dist, dir, "index.html"), html);
 }
@@ -454,7 +489,7 @@ for (const c of caseStudies) {
   await mkdir(path.join(dist, "case-studies", c.slug), { recursive: true });
   await writeFile(path.join(dist, "case-studies", c.slug, "index.html"), casePage(c));
 }
-const urls = ["/", "/services/", "/about/", ...caseStudies.map((c) => `/case-studies/${c.slug}/`)];
+const urls = ["/", "/services/", ...landings.map((l) => `/${l.slug}/`), "/about/", ...caseStudies.map((c) => `/case-studies/${c.slug}/`)];
 await writeFile(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `<url><loc>${SITE}${u}</loc><lastmod>${BUILT}</lastmod></url>`).join("\n")}\n</urlset>\n`);
 await writeFile(path.join(dist, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 

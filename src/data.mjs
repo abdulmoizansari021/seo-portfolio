@@ -418,3 +418,141 @@ export const courses = [
   { title: "AI Fluency: Framework and Foundations", org: "Anthropic" },
   { title: "Claude 101", org: "Anthropic" },
 ];
+
+// Focused service pages for specific searches. Proof figures repeat numbers already
+// verified in caseStudies above; add none here that a case study does not back.
+export const landings = [
+  {
+    slug: "local-seo-karachi",
+    crumb: "Local SEO in Karachi",
+    title: "Local SEO Services in Karachi | Google Maps and GBP",
+    description: "Local SEO in Karachi: Google Business Profile optimisation, map pack visibility, area pages, citations and reviews for clinics, shops and service firms.",
+    eyebrow: "Local SEO · Karachi",
+    h1: "Local SEO services in Karachi",
+    lede: "Get found on Google Maps and in the local pack when people in Karachi search for what you offer, from Clifton and DHA to Gulshan-e-Iqbal, PECHS and North Nazimabad.",
+    sections: [
+      {
+        h2: "Why local search decides who gets the call",
+        paras: [
+          "When someone in Karachi searches for a clinic, a repair service or a shop, Google usually shows a map with three businesses before any website. Those three get most of the calls, direction requests and WhatsApp messages.",
+          "Karachi is large and spread out, so distance matters a lot: a business in Gulshan rarely appears for a search made in DHA. Local SEO is about being the most relevant and trusted result in the areas you actually serve, with a profile and website that turn that visibility into enquiries.",
+        ],
+      },
+      {
+        h2: "Search in English, Urdu and Roman Urdu",
+        paras: [
+          "Karachi customers search in more than one way: \"dentist near me\", \"AC repair Gulshan\", \"best bakery in DHA\", or the same idea in Urdu or Roman Urdu. I research the phrases your customers really use, then work them naturally into your Google Business Profile, your services and your area pages.",
+        ],
+      },
+    ],
+    includesTitle: "What local SEO with me includes",
+    includes: [
+      "Google Business Profile audit: primary and secondary categories, services, hours, description, photos and Q&A",
+      "Name, address and phone number made consistent across your website, profile and listings",
+      "Area and service pages for the parts of Karachi you serve, without thin copy-paste pages",
+      "LocalBusiness schema that matches your profile",
+      "A review workflow: asking happy customers, and replying to every review in English or Urdu",
+      "Citations on Pakistani directories and industry listings",
+      "Tracking calls, direction requests and website clicks in your profile and GA4",
+    ],
+    proofIntro: "The surgical practice below shows why the profile and the website have to work together: after a rebuild broke both Google Business Profile website links, I audited the profile, got the links fixed and redirected the broken URLs, and clicks still rose 83% year on year.",
+    cases: ["surgical-practice-site-rebuild", "interventional-radiology-visibility"],
+    faq: [
+      { q: "How long does local SEO take in Karachi?", a: "Profile fixes such as the right category and complete services can change your visibility within weeks. Competitive categories in busy areas take longer, usually several months of reviews, content and citations. I set expectations from your own profile data." },
+      { q: "Do I need a website for local SEO?", a: "A Google Business Profile can rank without one, but a fast website with clear service and area pages helps you rank in more searches and is where you can measure enquiries properly." },
+      { q: "Can you rank my business in areas where I have no office?", a: "The map results depend heavily on where your business is. I do not create fake addresses, because that breaks Google's guidelines and gets profiles suspended. For areas you serve without an office, I use service-area settings and useful area pages instead." },
+      { q: "What about fake or negative reviews?", a: "I help you reply calmly and professionally, and report reviews that break Google's policies through Google's own tools. Genuine reviews cannot be removed, but a steady flow of new ones from real customers changes the overall picture." },
+    ],
+  },
+  {
+    slug: "seo-for-doctors-clinics",
+    crumb: "SEO for doctors and clinics",
+    title: "SEO for Doctors and Clinics in Pakistan | Healthcare SEO",
+    description: "Healthcare SEO for doctors, clinics, hospitals and labs in Pakistan: medical schema, trustworthy content, local visibility and results from live YMYL sites.",
+    eyebrow: "Healthcare SEO · Pakistan",
+    h1: "SEO for doctors and clinics in Pakistan",
+    lede: "SEO for doctors, clinics, hospitals and diagnostic labs: medical schema, trustworthy content and local visibility, from a specialist whose recent work is mostly on live healthcare sites.",
+    sections: [
+      {
+        h2: "Health websites are held to a higher standard",
+        paras: [
+          "Google treats health as a \"Your Money or Your Life\" topic. Pages that give medical information need clear authorship, real credentials, accurate content and transparent contact details before they can rank well.",
+          "Many clinic websites in Pakistan miss these signals: no doctor profiles with qualifications, no medical structured data, and blog posts that never link to the treatment or booking pages they talk about. Fixing them is often the fastest win available.",
+        ],
+      },
+      {
+        h2: "Results from Pakistani healthcare sites",
+        paras: [
+          "Three of my six case studies are Pakistani healthcare websites. For a blood bank and laboratory network, Organic Search sessions grew 107.8% year on year in GA4. For an interventional radiologist, average position in Search Console moved from 13.4 to 7.6. For a two-surgeon practice, clicks rose 83% year on year through a full website rebuild.",
+        ],
+      },
+      {
+        h2: "Careful with medical content",
+        paras: [
+          "I plan, structure and optimise content, but clinical facts come from the doctor, and the doctor reviews every page before it goes live. No miracle claims and no promised outcomes: accuracy protects your patients and your rankings.",
+        ],
+      },
+    ],
+    includesTitle: "What healthcare SEO with me includes",
+    includes: [
+      "Doctor and practitioner profiles that show qualifications, experience and registration",
+      "MedicalOrganization, Physician, MedicalClinic and FAQPage structured data, validated live",
+      "A content roadmap around the conditions and treatments patients search for",
+      "Internal links from articles to treatment, test and booking pages",
+      "Google Business Profiles for each doctor and branch",
+      "Site rebuilds and migrations without losing the pages that rank",
+      "Visibility in Google AI Overviews and AI assistants for health questions",
+    ],
+    proofIntro: "Each case study shows the problem, what I changed and when, the before and after numbers, and the screenshots they come from.",
+    cases: ["healthcare-ngo-organic-growth", "interventional-radiology-visibility", "surgical-practice-site-rebuild"],
+    faq: [
+      { q: "Can SEO bring my clinic more appointments?", a: "Yes, when patients search for the treatments you offer or for doctors like you. I measure what matters to a clinic, such as calls, WhatsApp clicks and booking requests, not just traffic." },
+      { q: "Do you write medical content?", a: "I plan topics, write briefs and optimise pages. Clinical information comes from you or a medical writer, and you approve every page, so nothing goes live that you would not stand behind." },
+      { q: "I practise at more than one hospital. Can you help?", a: "Yes. A personal website plus consistent profiles for each location helps Google connect your name, your specialty and every place patients can see you." },
+      { q: "Do you work with doctors outside Karachi?", a: "Yes. I work remotely, and the case studies include a practice in Islamabad and a specialist with clinics in two Pakistani cities." },
+    ],
+  },
+  {
+    slug: "ecommerce-seo-pakistan",
+    crumb: "E-commerce SEO",
+    title: "E-commerce SEO in Pakistan | Shopify and WooCommerce SEO",
+    description: "E-commerce SEO for Shopify and WooCommerce stores in Pakistan: category and product pages, product schema, technical fixes and blog-to-product linking.",
+    eyebrow: "E-commerce SEO · Shopify and WooCommerce",
+    h1: "E-commerce SEO in Pakistan for Shopify and WooCommerce stores",
+    lede: "Rank your category and product pages, not just your blog. Technical fixes, product schema and internal linking for online stores selling in Pakistan and abroad.",
+    sections: [
+      {
+        h2: "Where online stores lose search traffic",
+        paras: [
+          "Most stores have the same leaks: filter and variant URLs that create duplicates, category pages with no useful text, products without structured data for price and availability, slow mobile pages, and blog posts that never link to the products they mention.",
+          "Each one is fixable, and fixing them helps Google send searchers straight to the pages that sell instead of to a blog post or a competitor.",
+        ],
+      },
+      {
+        h2: "Selling online in Pakistan",
+        paras: [
+          "Shoppers in Pakistan compare prices and look hard for trust before they order. Searches like \"price in Pakistan\" and \"original\" are common, and the pages that win show prices in rupees, delivery times, cash on delivery, the return policy and real reviews.",
+          "Marketplaces compete for the same searches, so category pages need to answer the shopper better than a long list of products does: buying advice, comparisons and clear next steps.",
+        ],
+      },
+    ],
+    includesTitle: "What e-commerce SEO with me includes",
+    includes: [
+      "Category page optimisation: headings, helpful intro copy and FAQs",
+      "Product, Offer, AggregateRating and BreadcrumbList structured data",
+      "Canonical and indexing rules for filters, variants and out-of-stock products",
+      "Blog-to-product and category internal linking",
+      "Google Merchant Center free listings support",
+      "Speed and Core Web Vitals checks on mobile",
+      "Access for AI crawlers so products can appear in AI answers",
+    ],
+    proofIntro: "Both stores below are outside Pakistan, but the work is the same on any Shopify or WooCommerce store: after schema fixes and blog-to-product linking, the Shopify store's average position moved from 13.9 to 8.5 with 33% more clicks year on year.",
+    cases: ["ecommerce-rankings-australia", "uk-furniture-ai-search-visibility"],
+    faq: [
+      { q: "Shopify or WooCommerce: which is better for SEO?", a: "Both can rank well. Shopify has a fixed URL structure and fewer settings to get wrong; WooCommerce gives more control but needs more care. I work with whichever you have rather than recommending a costly switch." },
+      { q: "Do I need unique product descriptions?", a: "Unique descriptions usually beat copied manufacturer text, but you do not need to rewrite everything at once. I start with the categories and products that bring the most revenue." },
+      { q: "Can my products appear in Google Shopping for free?", a: "Yes. Google Merchant Center free listings can show your products without paying for ads, once your product feed and structured data are set up correctly." },
+      { q: "Can a small store compete with big marketplaces?", a: "On broad searches it is hard. On specific products, brands and buying-guide searches, a focused store with better pages and real trust signals often wins." },
+    ],
+  },
+];
