@@ -7,7 +7,7 @@ export const profile = {
   title: "Senior SEO Specialist",
   location: "Karachi, Pakistan",
   availability: "Working with brands in Pakistan and worldwide",
-  email: "abdulmoizansari021@gmail.com",
+  email: "moiz@seoexpertinkarachi.online",
   cv: "/cv/Abdul-Moiz-Ansari-SEO-CV.pdf",
   // Add a real profile URL here (for example LinkedIn) and it will appear in the contact section.
   links: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/abdul-moiz-ansari/" }],
