@@ -1,5 +1,5 @@
 // Static site build: renders src/data.mjs into dist/ with no runtime dependencies.
-// Canonical URL: SITE_URL, else Vercel's production domain, else localhost.
+// Canonical URL: SITE_URL, else the custom domain on Vercel builds, else localhost.
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -12,8 +12,9 @@ import { readFileSync } from "node:fs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 
+const DOMAIN = "https://www.seoexpertinkarachi.online";
 const rawSite = process.env.SITE_URL
-  || (process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`)
+  || (process.env.VERCEL && DOMAIN)
   || "http://localhost:4173";
 const SITE = rawSite.replace(/\/+$/, "");
 const BUILT = new Date().toISOString().slice(0, 10);
@@ -87,6 +88,7 @@ function page({ title, description, pathname, body, jsonld }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-site-verification" content="eyZck6bram0ETZtG5IT-C3_rx0rNizEDyOIrYWUNysE">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${url}">
@@ -198,11 +200,20 @@ const personLd = {
   sameAs: profile.links.map((l) => l.href),
 };
 
+const serviceLd = {
+  "@type": "ProfessionalService", "@id": `${SITE}/#service`, name: `${profile.name}, SEO Expert in Karachi`, url: `${SITE}/`,
+  ...(profile.photo ? { image: `${SITE}${profile.photo}` } : {}), email: `mailto:${profile.email}`,
+  ...(profile.whatsapp ? { telephone: `+${profile.whatsapp}` } : {}),
+  address: { "@type": "PostalAddress", addressLocality: "Karachi", addressRegion: "Sindh", addressCountry: "PK" },
+  areaServed: [{ "@type": "City", name: "Karachi" }, { "@type": "Country", name: "Pakistan" }],
+  founder: { "@id": `${SITE}/#person` },
+};
+
 const home = page({
-  title: `${profile.name} | SEO consultant for brands in Pakistan and worldwide`,
-  description: `${profile.title} with 4+ years growing organic traffic and leads through technical SEO, content, local search and AI visibility. Results backed by Search Console and GA4.`,
+  title: `SEO Expert in Karachi | ${profile.name}, ${profile.title}`,
+  description: `SEO expert in Karachi with 4+ years growing organic traffic and leads through technical SEO, content, local SEO and AI visibility. Results backed by Search Console and GA4.`,
   pathname: "/",
-  jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd] },
+  jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd, serviceLd] },
   body: `
 <section class="studio-hero${profile.cutout ? " has-cutout hero-banner" : ""}">
 ${profile.cutout ? bannerFx : ""}
@@ -210,7 +221,7 @@ ${profile.cutout ? bannerFx : ""}
 <div class="wrap hero-grid">
 <div class="hero-left">
 <span class="hello rise">Hello, I&rsquo;m</span>
-<h1 class="hero-name">${esc(profile.name)}</h1>
+<h1 class="hero-name">${esc(profile.name)}<span class="hero-role">SEO Expert in Karachi</span></h1>
 <div class="cta rise" style="--dl:.2s"><a class="btn btn-hero btn-lg" href="#case-studies">View Case Studies <span class="arr" aria-hidden="true">&rarr;</span></a></div>
 </div>
 <div class="hero-visual">
@@ -271,7 +282,7 @@ ${promises.map((p, i) => `<div class="panel rv" style="--i:${i % 2}"><h3>${esc(p
 
 <section id="about-teaser"><div class="wrap"><div class="exp">
 <div class="exp-main rv">
-<div class="big"><b>4+</b><span>Years of<br>SEO experience</span>${profile.avatar ? `<img class="avatar" src="${esc(profile.avatar)}" alt="" width="168" height="168" loading="lazy" decoding="async">` : ""}</div>
+<div class="big"><b>4+</b><span>Years of<br>SEO experience</span>${profile.avatar ? `<img class="avatar" src="${esc(profile.avatar)}" alt="${esc(profile.name)}, SEO expert in Karachi" width="168" height="168" loading="lazy" decoding="async">` : ""}</div>
 <h2>Meet Moiz</h2>
 <p>I am a Senior SEO Specialist based in Karachi. I have managed end-to-end SEO for more than 20 websites, from local clinics to e-commerce stores and software companies, across technical, on-page, off-page, local and AI search.</p>
 <a class="btn btn-hero" href="/about/">More about me</a>

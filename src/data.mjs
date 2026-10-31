@@ -18,7 +18,7 @@ export const profile = {
   pitch:
     "I help brands grow organic traffic, leads and sales through technical SEO, content strategy, local search and AI visibility. You see the results in your own Search Console and GA4, not in a slide deck.",
   // Optional: a WhatsApp number in international format (for example "923001234567") adds a WhatsApp button.
-  whatsapp: "",
+  whatsapp: "923000178901",
   // Optional: path to a portrait in public/ (for example "/images/moiz.webp"). It replaces the hero graph on desktop.
   photo: "/images/moiz-ansari-round.webp",
   // Background-removed portrait for the home hero (falls back to the round photo).
