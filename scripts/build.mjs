@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 
-const DOMAIN = "https://www.seoexpertinkarachi.online";
+const DOMAIN = "https://seoexpertinkarachi.online";
 const rawSite = process.env.SITE_URL
   || (process.env.VERCEL && DOMAIN)
   || "http://localhost:4173";
