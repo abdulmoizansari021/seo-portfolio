@@ -147,6 +147,9 @@ ${body}
 </dialog>
 <button type="button" class="to-top" aria-label="Back to top"><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="track" cx="24" cy="24" r="22"/><circle class="prog" cx="24" cy="24" r="22" pathLength="1"/></svg><svg class="up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>${motionJs}</script>
+<!-- Vercel Web Analytics: the script is served by Vercel, so it only loads on deployments. -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 `;

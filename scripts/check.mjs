@@ -24,6 +24,7 @@ for (const f of files.filter((f) => /\.(html|xml|txt|js|css)$/.test(f))) {
   const text = await readFile(f, "utf8");
   for (const b of banned) if (b.test(text)) problems.push(`${path.relative(dist, f)}: matches ${b}`);
   for (const [, href] of text.matchAll(/(?:href|src)="(\/[^"#?]*)/g)) {
+    if (href.startsWith("/_vercel/")) continue; // served by Vercel at runtime, not in dist/
     const target = path.join(dist, href);
     if (!existsSync(target) && !existsSync(path.join(target, "index.html"))) problems.push(`${path.relative(dist, f)}: broken link ${href}`);
   }
