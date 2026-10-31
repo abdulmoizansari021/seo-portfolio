@@ -18,6 +18,7 @@ const rawSite = process.env.SITE_URL
   || "http://localhost:4173";
 const SITE = rawSite.replace(/\/+$/, "");
 const BUILT = new Date().toISOString().slice(0, 10);
+const PUBLISHED = "2026-10-30";
 
 assertContrast();
 const minify = (t) => t.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*\n\s*/g, "\n");
@@ -81,8 +82,15 @@ const img = (file, alt, { eager = false, sizes = "(min-width: 760px) 50vw, 100vw
 const SHORT = { yoy: "year on year", m3: "3 months vs previous", m6: "6 months vs previous", d60: "60 days vs previous", since: "since May 2026" };
 const typeOf = (m) => m.type || "yoy";
 
-function page({ title, description, pathname, body, jsonld }) {
+const OG_IMAGE = "/images/og-seo-expert-karachi.jpg";
+// Trim to the last whole word under max, so meta descriptions never end mid-word.
+const clip = (t, max = 155) => t.length <= max ? t : `${t.slice(0, max).replace(/[\s,;:]+\S*$/, "")}...`;
+
+function page({ title, description, pathname, body, jsonld, crumb, ogType = "website" }) {
   const url = `${SITE}${pathname}`;
+  // BreadcrumbList for every inner page; the visible crumbs come from band() or the case hero.
+  const crumbs = crumb && { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` }, { "@type": "ListItem", position: 2, name: crumb, item: url }] };
+  const ld = jsonld && crumbs ? { "@context": "https://schema.org", "@graph": [...(jsonld["@graph"] || [Object.fromEntries(Object.entries(jsonld).filter(([k]) => k !== "@context"))]), crumbs] } : jsonld;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -92,17 +100,24 @@ function page({ title, description, pathname, body, jsonld }) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${url}">
-<meta property="og:type" content="website">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta property="og:type" content="${ogType}">
+<meta property="og:site_name" content="${esc(profile.name)}, SEO Expert in Karachi">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE}${OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(profile.name)}, SEO expert in Karachi">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE}${OG_IMAGE}">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/barlow-semi-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>${css}</style>
 <script>document.documentElement.classList.add("js")</script>
-${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ""}
+${ld ? `<script type="application/ld+json">${JSON.stringify(ld)}</script>` : ""}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -211,9 +226,10 @@ const serviceLd = {
 
 const home = page({
   title: `SEO Expert in Karachi | ${profile.name}, ${profile.title}`,
-  description: `SEO expert in Karachi with 4+ years growing organic traffic and leads through technical SEO, content, local SEO and AI visibility. Results backed by Search Console and GA4.`,
+  description: "SEO expert in Karachi with 4+ years growing organic traffic and leads through technical SEO, content, local SEO and AI search. Results you can check in GA4.",
   pathname: "/",
-  jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd, serviceLd] },
+  jsonld: { "@context": "https://schema.org", "@graph": [{ "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: profile.name, publisher: { "@id": `${SITE}/#person` } }, personLd, serviceLd,
+    { "@type": "FAQPage", "@id": `${SITE}/#faq`, mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }] },
   body: `
 <section class="studio-hero${profile.cutout ? " has-cutout hero-banner" : ""}">
 ${profile.cutout ? bannerFx : ""}
@@ -221,7 +237,7 @@ ${profile.cutout ? bannerFx : ""}
 <div class="wrap hero-grid">
 <div class="hero-left">
 <span class="hello rise">Hello, I&rsquo;m</span>
-<h1 class="hero-name">${esc(profile.name)}<span class="hero-role">SEO Expert in Karachi</span></h1>
+<h1 class="hero-name">${esc(profile.name)} <span class="hero-role">SEO Expert in Karachi</span></h1>
 <div class="cta rise" style="--dl:.2s"><a class="btn btn-hero btn-lg" href="#case-studies">View Case Studies <span class="arr" aria-hidden="true">&rarr;</span></a></div>
 </div>
 <div class="hero-visual">
@@ -310,12 +326,13 @@ ${contactBlock("Tell me about your website", "Send your website and what you wan
 });
 
 const servicesPage = page({
-  title: `SEO services: audits, technical, content, local and AI search | ${profile.name}`,
-  description: "SEO audits, technical SEO and migrations, content strategy, local SEO and Google Business Profile, AI search visibility and ongoing SEO management.",
+  title: "SEO Services in Karachi | Audits, Technical, Local and AI SEO",
+  description: "SEO services in Karachi: audits, technical SEO and migrations, content strategy, local SEO and Google Business Profile, AI search and monthly SEO.",
   pathname: "/services/",
-  jsonld: { "@context": "https://schema.org", "@graph": [personLd, ...services.map((s) => ({ "@type": "Service", name: s.name, description: s.outcome, provider: { "@id": `${SITE}/#person` } }))] },
+  crumb: "Services",
+  jsonld: { "@context": "https://schema.org", "@graph": [personLd, ...services.map((s) => ({ "@type": "Service", name: s.name, description: s.outcome, provider: { "@id": `${SITE}/#person` }, areaServed: [{ "@type": "City", name: "Karachi" }, { "@type": "Country", name: "Pakistan" }] }))] },
   body: `
-${band({ crumbs: "Services", eyebrow: "Services", title: "SEO services that start from your data", lede: "Every engagement begins with your own Search Console and GA4, so we agree on the starting point before any work begins." })}
+${band({ crumbs: "Services", eyebrow: "Services", title: "SEO services in Karachi that start from your data", lede: "Every engagement begins with your own Search Console and GA4, so we agree on the starting point before any work begins." })}
 <div class="wrap">
 <section style="padding-bottom:10px">${head("What I offer", "Six ways I can help your brand grow")}
 <ul class="svc-rows">${services.map((s, i) => `<li class="rv from-left" style="--i:${i}"><a href="#${s.id}"><span class="ic">${icon(s.icon)}</span><b>${esc(s.name)}</b><span class="desc">${esc(s.outcome)}</span><span class="go">Details &rarr;</span></a></li>`).join("")}</ul></section>
@@ -328,14 +345,15 @@ ${contactBlock("Not sure which service you need?", "Send me your website and goa
 });
 
 const aboutPage = page({
-  title: `About ${profile.name}, ${profile.title}`,
+  title: `About ${profile.name} | SEO Expert in Karachi`,
   description: `${profile.name} is a ${profile.title} in Karachi with 4+ years of experience and 20+ websites managed across technical, on-page, local, AEO and GEO.`,
   pathname: "/about/",
+  crumb: "About",
   jsonld: { "@context": "https://schema.org", "@type": "ProfilePage", url: `${SITE}/about/`, mainEntity: personLd },
   body: `
-${band({ crumbs: "About", eyebrow: `${profile.title} · ${profile.location}`, title: "About Moiz", lede: profile.summary })}
+${band({ crumbs: "About", eyebrow: `${profile.title} · ${profile.location}`, title: `About ${profile.name}`, lede: profile.summary })}
 <div class="wrap">
-<section class="about-intro">${profile.photo ? `<img class="about-photo rv" src="${esc(profile.photo)}" alt="${esc(profile.name)}" width="600" height="600" loading="lazy" decoding="async">` : ""}<div><h2>How I approach SEO</h2>
+<section class="about-intro">${profile.photo ? `<img class="about-photo rv" src="${esc(profile.photo)}" alt="${esc(profile.name)}, SEO expert in Karachi" width="600" height="600" loading="lazy" decoding="async">` : ""}<div><h2>How I approach SEO</h2>
 <div class="prose rv"><p>I care about the numbers a business owner can check: clicks, sessions, leads and calls in their own accounts. That is why every result on this site links to the report it comes from, and why I label anything I cannot verify.</p>
 <p>Most of my recent work is in healthcare and other sensitive topics, where accuracy and trust signals matter as much as keywords. I also work with local businesses, e-commerce stores and software companies.</p></div></div></section>
 
@@ -363,10 +381,15 @@ ${contactBlock("Want to work together?", "Tell me about your website and what yo
 
 function casePage(c) {
   return page({
-    title: `${c.title} | ${c.label} | ${profile.name}`,
-    description: `${c.summary.slice(0, 150)}`,
+    title: c.title.length <= 47 ? `${c.title} | SEO Case Study` : c.title,
+    description: clip(c.summary),
     pathname: `/case-studies/${c.slug}/`,
-    jsonld: { "@context": "https://schema.org", "@type": "Article", headline: c.title, author: { "@type": "Person", name: profile.name }, dateModified: BUILT, url: `${SITE}/case-studies/${c.slug}/` },
+    crumb: c.title,
+    ogType: "article",
+    jsonld: { "@context": "https://schema.org", "@type": "Article", headline: c.title, description: clip(c.summary),
+      ...(c.evidence?.length ? { image: `${SITE}/images/evidence/${c.evidence[0].file}.webp` } : {}),
+      author: { "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, url: `${SITE}/about/` }, publisher: { "@id": `${SITE}/#person` },
+      datePublished: PUBLISHED, dateModified: BUILT, mainEntityOfPage: `${SITE}/case-studies/${c.slug}/`, inLanguage: "en" },
     body: `
 <section class="hero-dark case-band">
 ${caseFx}
@@ -426,7 +449,7 @@ for (const [dir, html] of [["services", servicesPage], ["about", aboutPage]]) {
   await mkdir(path.join(dist, dir), { recursive: true });
   await writeFile(path.join(dist, dir, "index.html"), html);
 }
-await writeFile(path.join(dist, "404.html"), notFound.replace(/<link rel="canonical"[^>]+>\n/, '<meta name="robots" content="noindex">\n'));
+await writeFile(path.join(dist, "404.html"), notFound.replace(/<meta name="robots"[^>]+>\n/, "").replace(/<link rel="canonical"[^>]+>\n/, '<meta name="robots" content="noindex">\n'));
 for (const c of caseStudies) {
   await mkdir(path.join(dist, "case-studies", c.slug), { recursive: true });
   await writeFile(path.join(dist, "case-studies", c.slug, "index.html"), casePage(c));
