@@ -83,6 +83,18 @@ const SHORT = { yoy: "year on year", m3: "3 months vs previous", m6: "6 months v
 const typeOf = (m) => m.type || "yoy";
 
 const OG_IMAGE = "/images/og-seo-expert-karachi.jpg";
+const GA_ID = "G-SBKL8H3PVW";
+// GA4 lead events: one listener catches every WhatsApp and email link, wherever it sits on the page.
+const leadEvents = `document.addEventListener("click", function (e) {
+  var a = e.target.closest && e.target.closest('a[href^="https://wa.me/"], a[href^="mailto:"]');
+  if (!a || typeof gtag !== "function") return;
+  var where = a.closest("header") ? "header" : a.closest("footer") ? "footer" : (a.closest("[id]") || {}).id || "page";
+  gtag("event", a.href.indexOf("mailto:") === 0 ? "email_click" : "whatsapp_click", {
+    link_text: (a.textContent.trim() || a.getAttribute("aria-label") || "").slice(0, 100),
+    link_location: where,
+    page_path: location.pathname
+  });
+});`;
 // Trim to the last whole word under max, so meta descriptions never end mid-word.
 const clip = (t, max = 155) => t.length <= max ? t : `${t.slice(0, max).replace(/[\s,;:]+\S*$/, "")}...`;
 
@@ -96,6 +108,8 @@ function page({ title, description, pathname, body, jsonld, crumb, ogType = "web
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag("js", new Date()); gtag("config", "${GA_ID}");</script>
 <meta name="google-site-verification" content="eyZck6bram0ETZtG5IT-C3_rx0rNizEDyOIrYWUNysE">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
@@ -147,6 +161,7 @@ ${body}
 </dialog>
 <button type="button" class="to-top" aria-label="Back to top"><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="track" cx="24" cy="24" r="22"/><circle class="prog" cx="24" cy="24" r="22" pathLength="1"/></svg><svg class="up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>${motionJs}</script>
+<script>${leadEvents}</script>
 <!-- Vercel Web Analytics: the script is served by Vercel, so it only loads on deployments. -->
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
