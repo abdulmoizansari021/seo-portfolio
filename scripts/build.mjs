@@ -230,9 +230,15 @@ const auditJs = `document.addEventListener("submit", function (e) {
     return;
   }
   var btn = f.querySelector("button"); btn.disabled = true; note.textContent = "Sending...";
-  fetch(f.dataset.endpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ access_key: f.dataset.key, subject: "Free SEO audit request: " + site, from_name: "seoexpertinkarachi.online", replyto: email, website: site, email: email, page: location.href, botcheck: f.botcheck.checked }) })
-    .then(function (r) { if (!r.ok) throw 0; f.reset(); note.textContent = "Thanks. I will reply to " + email + " within 24 hours."; })
+  // FormData keeps this a simple request (no CORS pre-check), which Web3Forms requires.
+  var data = new FormData();
+  data.append("access_key", f.dataset.key); data.append("subject", "Free SEO audit request: " + site);
+  data.append("from_name", "seoexpertinkarachi.online"); data.append("replyto", email);
+  data.append("website", site); data.append("email", email); data.append("page", location.href);
+  if (f.botcheck.checked) data.append("botcheck", "on");
+  fetch(f.dataset.endpoint, { method: "POST", body: data })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (!j.success) throw 0; f.reset(); note.textContent = "Thanks. I will reply to " + email + " within 24 hours."; })
     .catch(function () { note.textContent = "Could not send. Please email " + f.dataset.mail + " instead."; })
     .finally(function () { btn.disabled = false; });
 });`;
