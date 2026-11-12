@@ -22,9 +22,9 @@ export const profile = {
   // Optional: path to a portrait in public/ (for example "/images/moiz.webp"). It replaces the hero graph on desktop.
   photo: "/images/moiz-ansari-round.webp",
   // Background-removed portrait for the home hero (falls back to the round photo).
-  cutout: "/images/moiz-ansari-portrait-700.webp",
-  cutoutSmall: "/images/moiz-ansari-portrait-420.webp",
-  cutoutMedium: "/images/moiz-ansari-portrait-600.webp",
+  cutout: "/images/moiz-ansari-headshot-800.webp",
+  cutoutSmall: "/images/moiz-ansari-headshot-420.webp",
+  cutoutMedium: "/images/moiz-ansari-headshot-600.webp",
   avatar: "/images/moiz-ansari-round-168.webp",
 };
 
