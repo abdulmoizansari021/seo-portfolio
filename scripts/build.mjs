@@ -198,13 +198,13 @@ function caseCard(c, i) {
 const tagCounts = caseStudies.flatMap((c) => c.tags).reduce((m, t) => m.set(t, (m.get(t) || 0) + 1), new Map());
 const allTags = ["All", ...[...tagCounts].filter(([, n]) => n < caseStudies.length).map(([t]) => t)];
 const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(enquiry.subject)}&body=${encodeURIComponent(enquiry.body)}`;
-const contactButtons = (primary = "Email me about your website") => `<a class="btn btn-hero" href="${mailto}">${esc(primary)}</a>
+const contactButtons = (primary = "Get a free traffic check") => `<a class="btn btn-hero" href="${mailto}">${esc(primary)}</a>
 ${profile.whatsapp ? `<a class="btn btn-hero-ghost" href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener">WhatsApp</a>` : ""}
 ${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" rel="me noopener">${esc(l.label)}</a>`).join("")}`;
 const contactBlock = (heading, text) => `<section id="contact"><div class="wrap"><div class="contact rv">
 <h2>${esc(heading)}</h2><p>${esc(text)}</p>
 <div class="cta" style="display:flex;flex-wrap:wrap;gap:12px">${contactButtons()}</div>
-<p class="contact-mail">Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
+<p class="contact-mail">Free, no obligation. I reply within 24 hours. Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
 </div></div></section>`;
 const band = ({ crumbs, eyebrow, title, lede }) => `<section class="hero-dark case-band">
 ${caseFx}
@@ -339,7 +339,7 @@ ${head("FAQ", "Questions clients ask")}
 <div class="faq">${faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
 </div></section>
 
-${contactBlock("Tell me about your website", "Send your website and what you want more of. I will look at it and reply with what I see and how I would approach it.")}
+${contactBlock("Is your website traffic dropping?", "Fewer clicks, fewer leads, rankings slipping and no clear reason why. Send me your website and I will do a free SEO audit, then tell you exactly why your traffic dropped and what to fix first to get it back.")}
 `,
 });
 
@@ -396,7 +396,7 @@ ${skills.map((s, i) => `<div class="panel rv" style="--i:${i % 3}"><h3>${esc(s.g
 </div>
 <p style="margin-top:18px"><a href="${profile.cv}" download>Download my CV (PDF)</a></p></section>
 </div>
-${contactBlock("Want to work together?", "Tell me about your website and what you want more of.")}`,
+${contactBlock("Want to work together?", "Start with a free SEO audit of your website. I will tell you what is holding it back and what to fix first.")}`,
 });
 
 function casePage(c) {
@@ -455,7 +455,7 @@ ${caseFx}
 <section><div class="note rv"><h2>Limits of this evidence</h2><ul>${c.limitations.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div></section>
 
 </div>
-${contactBlock("Want results like this for your brand?", "Send me your website and what you want more of. I will reply with what I see and how I would approach it.")}`,
+${contactBlock("Want results like this for your brand?", "Send me your website for a free SEO audit. I will tell you what is holding it back and how I would approach it.")}`,
   });
 }
 

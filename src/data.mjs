@@ -29,8 +29,8 @@ export const profile = {
 
 // Prefilled email so a prospect sends the details needed for a first reply.
 export const enquiry = {
-  subject: "SEO enquiry",
-  body: "Website:\nWhat I want more of (leads, sales, calls, bookings):\nMain markets or cities:\nCan share Search Console and GA4 access (yes or no):\nAnything else:\n",
+  subject: "Free SEO audit request",
+  body: "Website:\nHas traffic dropped? If yes, roughly when:\nWhat I want more of (leads, sales, calls, bookings):\nMain markets or cities:\nCan share Search Console and GA4 access (yes or no):\nAnything else:\n",
 };
 
 export const services = [
