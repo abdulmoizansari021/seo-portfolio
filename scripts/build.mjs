@@ -202,33 +202,46 @@ const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(enquiry.sub
 const contactButtons = (primary = "Get a free traffic check") => `<a class="btn btn-hero" href="${mailto}">${esc(primary)}</a>
 ${profile.whatsapp ? `<a class="btn btn-hero-ghost" href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener">WhatsApp</a>` : ""}
 ${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" rel="me noopener">${esc(l.label)}</a>`).join("")}`;
-// Free audit form: the visitor types their website and it is carried into the email or WhatsApp message.
-// Without JavaScript the form is hidden and the plain buttons below take over.
-const auditForm = `<form class="audit-form" data-mail="${esc(profile.email)}" data-subject="${esc(enquiry.subject)}" data-body="${esc(enquiry.body)}" data-wa="${esc(profile.whatsapp || "")}">
+// Free audit form on the right of every contact box: website and email.
+// AUDIT_ENDPOINT, when set, receives the form as JSON (for example a Web3Forms
+// key); until then the details are carried into a pre-filled email instead.
+// Without JavaScript the form is hidden and the plain buttons take over.
+const AUDIT_ENDPOINT = "";
+const AUDIT_KEY = "";
+const auditForm = `<form class="audit-form" data-mail="${esc(profile.email)}" data-subject="${esc(enquiry.subject)}" data-body="${esc(enquiry.body)}" data-endpoint="${esc(AUDIT_ENDPOINT)}" data-key="${esc(AUDIT_KEY)}">
+<h3>Get your free SEO audit</h3>
 <label for="audit-url">Your website</label>
-<div class="audit-row"><input id="audit-url" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourwebsite.com" required>
-<button class="btn btn-hero" type="submit" value="mail">Get my free audit</button>
-${profile.whatsapp ? `<button class="btn btn-hero-ghost" type="submit" value="wa">Send on WhatsApp</button>` : ""}</div>
+<input id="audit-url" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourwebsite.com" required>
+<label for="audit-email">Your email</label>
+<input id="audit-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+<button class="btn btn-hero" type="submit">Get my free audit</button>
+<p class="audit-note" role="status" aria-live="polite">Free, no obligation. I reply within 24 hours.</p>
 </form>`;
 const auditJs = `document.addEventListener("submit", function (e) {
   var f = e.target;
   if (!f.classList || !f.classList.contains("audit-form")) return;
   e.preventDefault();
-  var site = f.website.value.trim();
-  if (!site) { f.website.focus(); return; }
-  var viaWa = e.submitter && e.submitter.value === "wa";
-  if (typeof gtag === "function") gtag("event", "audit_request", { method: viaWa ? "whatsapp" : "email", page_path: location.pathname });
-  if (viaWa) {
-    window.open("https://wa.me/" + f.dataset.wa + "?text=" + encodeURIComponent("Hi Moiz, I would like a free SEO audit of my website: " + site), "_blank", "noopener");
-  } else {
-    location.href = "mailto:" + f.dataset.mail + "?subject=" + encodeURIComponent(f.dataset.subject) + "&body=" + encodeURIComponent(f.dataset.body.replace("Website:", "Website: " + site));
+  if (!f.reportValidity()) return;
+  var site = f.website.value.trim(), email = f.email.value.trim(), note = f.querySelector(".audit-note");
+  if (typeof gtag === "function") gtag("event", "audit_request", { page_path: location.pathname });
+  if (!f.dataset.endpoint) {
+    location.href = "mailto:" + f.dataset.mail + "?subject=" + encodeURIComponent(f.dataset.subject) + "&body=" + encodeURIComponent(f.dataset.body.replace("Website:", "Website: " + site + "\\nMy email: " + email));
+    return;
   }
+  var btn = f.querySelector("button"); btn.disabled = true; note.textContent = "Sending...";
+  fetch(f.dataset.endpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ access_key: f.dataset.key, subject: f.dataset.subject, website: site, email: email, page: location.pathname }) })
+    .then(function (r) { if (!r.ok) throw 0; f.reset(); note.textContent = "Thanks. I will reply to " + email + " within 24 hours."; })
+    .catch(function () { note.textContent = "Could not send. Please email " + f.dataset.mail + " instead."; })
+    .finally(function () { btn.disabled = false; });
 });`;
 const contactBlock = (heading, text) => `<section id="contact"><div class="wrap"><div class="contact rv">
+<div class="contact-copy">
 <h2>${esc(heading)}</h2><p>${esc(text)}</p>
-${auditForm}
 <div class="cta contact-btns" style="display:flex;flex-wrap:wrap;gap:12px">${contactButtons()}</div>
-<p class="contact-mail">Free, no obligation. I reply within 24 hours. Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
+<p class="contact-mail">Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
+</div>
+${auditForm}
 </div></div></section>`;
 const band = ({ crumbs, eyebrow, title, lede }) => `<section class="hero-dark case-band">
 ${caseFx}
@@ -363,7 +376,7 @@ ${head("FAQ", "Questions clients ask")}
 <div class="faq">${faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
 </div></section>
 
-${contactBlock("Is your website traffic dropping?", "Fewer clicks, fewer leads, rankings slipping and no clear reason why. Enter your website below and I will do a free SEO audit, then tell you exactly why your traffic dropped and what to fix first to get it back.")}
+${contactBlock("Is your website traffic dropping?", "Fewer clicks, fewer leads, rankings slipping and no clear reason why. Enter your website and email and I will do a free SEO audit, then tell you exactly why your traffic dropped and what to fix first to get it back.")}
 `,
 });
 
