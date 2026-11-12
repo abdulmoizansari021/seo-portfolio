@@ -161,7 +161,8 @@ ${body}
 </dialog>
 <button type="button" class="to-top" aria-label="Back to top"><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle class="track" cx="24" cy="24" r="22"/><circle class="prog" cx="24" cy="24" r="22" pathLength="1"/></svg><svg class="up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>${motionJs}</script>
-<script>${leadEvents}</script>
+<script>${leadEvents}
+${auditJs}</script>
 <!-- Vercel Web Analytics: the script is served by Vercel, so it only loads on deployments. -->
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -201,9 +202,32 @@ const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(enquiry.sub
 const contactButtons = (primary = "Get a free traffic check") => `<a class="btn btn-hero" href="${mailto}">${esc(primary)}</a>
 ${profile.whatsapp ? `<a class="btn btn-hero-ghost" href="https://wa.me/${esc(profile.whatsapp)}" rel="noopener">WhatsApp</a>` : ""}
 ${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" rel="me noopener">${esc(l.label)}</a>`).join("")}`;
+// Free audit form: the visitor types their website and it is carried into the email or WhatsApp message.
+// Without JavaScript the form is hidden and the plain buttons below take over.
+const auditForm = `<form class="audit-form" data-mail="${esc(profile.email)}" data-subject="${esc(enquiry.subject)}" data-body="${esc(enquiry.body)}" data-wa="${esc(profile.whatsapp || "")}">
+<label for="audit-url">Your website</label>
+<div class="audit-row"><input id="audit-url" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourwebsite.com" required>
+<button class="btn btn-hero" type="submit" value="mail">Get my free audit</button>
+${profile.whatsapp ? `<button class="btn btn-hero-ghost" type="submit" value="wa">Send on WhatsApp</button>` : ""}</div>
+</form>`;
+const auditJs = `document.addEventListener("submit", function (e) {
+  var f = e.target;
+  if (!f.classList || !f.classList.contains("audit-form")) return;
+  e.preventDefault();
+  var site = f.website.value.trim();
+  if (!site) { f.website.focus(); return; }
+  var viaWa = e.submitter && e.submitter.value === "wa";
+  if (typeof gtag === "function") gtag("event", "audit_request", { method: viaWa ? "whatsapp" : "email", page_path: location.pathname });
+  if (viaWa) {
+    window.open("https://wa.me/" + f.dataset.wa + "?text=" + encodeURIComponent("Hi Moiz, I would like a free SEO audit of my website: " + site), "_blank", "noopener");
+  } else {
+    location.href = "mailto:" + f.dataset.mail + "?subject=" + encodeURIComponent(f.dataset.subject) + "&body=" + encodeURIComponent(f.dataset.body.replace("Website:", "Website: " + site));
+  }
+});`;
 const contactBlock = (heading, text) => `<section id="contact"><div class="wrap"><div class="contact rv">
 <h2>${esc(heading)}</h2><p>${esc(text)}</p>
-<div class="cta" style="display:flex;flex-wrap:wrap;gap:12px">${contactButtons()}</div>
+${auditForm}
+<div class="cta contact-btns" style="display:flex;flex-wrap:wrap;gap:12px">${contactButtons()}</div>
 <p class="contact-mail">Free, no obligation. I reply within 24 hours. Or write to <a href="${mailto}">${esc(profile.email)}</a>.</p>
 </div></div></section>`;
 const band = ({ crumbs, eyebrow, title, lede }) => `<section class="hero-dark case-band">
@@ -339,7 +363,7 @@ ${head("FAQ", "Questions clients ask")}
 <div class="faq">${faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
 </div></section>
 
-${contactBlock("Is your website traffic dropping?", "Fewer clicks, fewer leads, rankings slipping and no clear reason why. Send me your website and I will do a free SEO audit, then tell you exactly why your traffic dropped and what to fix first to get it back.")}
+${contactBlock("Is your website traffic dropping?", "Fewer clicks, fewer leads, rankings slipping and no clear reason why. Enter your website below and I will do a free SEO audit, then tell you exactly why your traffic dropped and what to fix first to get it back.")}
 `,
 });
 
@@ -361,7 +385,7 @@ ${services.map((s) => `<section id="${s.id}" class="svc-detail rv"><div><h2>${es
 <section>${head("Process", "How we work together")}
 ${steps()}</section>
 </div>
-${contactBlock("Not sure which service you need?", "Send me your website and goals. I will tell you where I would start and why.")}`,
+${contactBlock("Not sure which service you need?", "Enter your website for a free SEO audit. I will tell you what is holding it back and where I would start.")}`,
 });
 
 const aboutPage = page({
@@ -488,7 +512,7 @@ ${head("Proof", "Related case studies", l.proofIntro, true)}
 ${head("FAQ", "Questions clients ask")}
 <div class="faq">${l.faq.map((f) => `<details class="rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("")}</div>
 </div></section>
-${contactBlock("Tell me about your business", "Send me your website and what you want more of. I will reply with what I see and where I would start.")}`,
+${contactBlock("Get a free audit of your website", "Enter your website and I will do a free SEO audit, then tell you what is holding it back and where I would start.")}`,
   });
 }
 

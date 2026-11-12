@@ -317,3 +317,14 @@ section { padding: 64px 0; }
   .studio-hero.hero-banner .hero-cutout { margin: 0 -20px; }
   .studio-hero.hero-banner .hero-right { position: relative; z-index: 3; }
 }
+
+/* free audit form inside the contact box */
+.audit-form { margin: 22px 0 14px; max-width: 640px; }
+.audit-form label { display: block; color: var(--hero-ink); font-weight: 600; font-size: .95rem; margin-bottom: 8px; }
+.audit-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.audit-row input { flex: 1 1 240px; min-width: 0; padding: 12px 18px; border-radius: 999px; border: 1px solid #3a3a40; background: #1f1f23; color: #ffffff; font: inherit; font-size: 1rem; }
+.audit-row input::placeholder { color: #9a9aa2; }
+.audit-row input:focus-visible { outline: 2px solid var(--hero-accent); outline-offset: 2px; border-color: transparent; }
+.js .contact-btns .btn-hero, .js .contact-btns a[href^="https://wa.me/"] { display: none; }
+html:not(.js) .audit-form { display: none; }
+@media (max-width: 560px) { .audit-row .btn { flex: 1 1 100%; justify-content: center; } }
