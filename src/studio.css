@@ -333,3 +333,4 @@ section { padding: 64px 0; }
 .audit-form .audit-note { margin: 4px 0 0; font-size: .86rem; color: var(--hero-muted); }
 .js .contact-btns .btn-hero { display: none; }
 html:not(.js) .audit-form { display: none; }
+.audit-form .audit-trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

@@ -206,14 +206,15 @@ ${profile.links.map((l) => `<a class="btn btn-hero-ghost" href="${esc(l.href)}" 
 // AUDIT_ENDPOINT, when set, receives the form as JSON (for example a Web3Forms
 // key); until then the details are carried into a pre-filled email instead.
 // Without JavaScript the form is hidden and the plain buttons take over.
-const AUDIT_ENDPOINT = "";
-const AUDIT_KEY = "";
+const AUDIT_ENDPOINT = "https://api.web3forms.com/submit";
+const AUDIT_KEY = "e91e9881-1559-4e46-84d1-5e690f4b985a";
 const auditForm = `<form class="audit-form" data-mail="${esc(profile.email)}" data-subject="${esc(enquiry.subject)}" data-body="${esc(enquiry.body)}" data-endpoint="${esc(AUDIT_ENDPOINT)}" data-key="${esc(AUDIT_KEY)}">
 <h3>Get your free SEO audit</h3>
 <label for="audit-url">Your website</label>
 <input id="audit-url" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourwebsite.com" required>
 <label for="audit-email">Your email</label>
 <input id="audit-email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required>
+<input type="checkbox" name="botcheck" class="audit-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn btn-hero" type="submit">Get my free audit</button>
 <p class="audit-note" role="status" aria-live="polite">Free, no obligation. I reply within 24 hours.</p>
 </form>`;
@@ -230,7 +231,7 @@ const auditJs = `document.addEventListener("submit", function (e) {
   }
   var btn = f.querySelector("button"); btn.disabled = true; note.textContent = "Sending...";
   fetch(f.dataset.endpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ access_key: f.dataset.key, subject: f.dataset.subject, website: site, email: email, page: location.pathname }) })
+    body: JSON.stringify({ access_key: f.dataset.key, subject: "Free SEO audit request: " + site, from_name: "seoexpertinkarachi.online", replyto: email, website: site, email: email, page: location.href, botcheck: f.botcheck.checked }) })
     .then(function (r) { if (!r.ok) throw 0; f.reset(); note.textContent = "Thanks. I will reply to " + email + " within 24 hours."; })
     .catch(function () { note.textContent = "Could not send. Please email " + f.dataset.mail + " instead."; })
     .finally(function () { btn.disabled = false; });
