@@ -24,6 +24,7 @@ export const profile = {
   // Background-removed portrait for the home hero (falls back to the round photo).
   cutout: "/images/moiz-ansari-portrait-700.webp",
   cutoutSmall: "/images/moiz-ansari-portrait-420.webp",
+  cutoutMedium: "/images/moiz-ansari-portrait-600.webp",
   avatar: "/images/moiz-ansari-round-168.webp",
 };
 

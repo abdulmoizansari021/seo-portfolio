@@ -108,8 +108,9 @@ function page({ title, description, pathname, body, jsonld, crumb, ogType = "web
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
-<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag("js", new Date()); gtag("config", "${GA_ID}");</script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag("js", new Date()); gtag("config", "${GA_ID}");
+// GA4 loads after the page has painted so its 177 KB never competes with the hero; calls made before then wait in dataLayer.
+addEventListener("load", function () { setTimeout(function () { var s = document.createElement("script"); s.async = true; s.src = "https://www.googletagmanager.com/gtag/js?id=${GA_ID}"; document.head.appendChild(s); }, 0); });</script>
 <meta name="google-site-verification" content="eyZck6bram0ETZtG5IT-C3_rx0rNizEDyOIrYWUNysE">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
@@ -304,7 +305,7 @@ ${profile.cutout ? bannerFx : ""}
 </div>
 <div class="hero-visual">
 ${profile.cutout
-  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" srcset="${esc(profile.cutoutSmall)} 420w, ${esc(profile.cutout)} 700w" sizes="(min-width: 980px) 440px, 300px" alt="${esc(profile.name)}, ${esc(profile.title)}" width="700" height="923" fetchpriority="high" decoding="async">`
+  ? `<img class="hero-cutout" src="${esc(profile.cutout)}" srcset="${esc(profile.cutoutSmall)} 420w, ${esc(profile.cutoutMedium)} 600w, ${esc(profile.cutout)} 700w" sizes="(min-width: 980px) 470px, 334px" alt="${esc(profile.name)}, ${esc(profile.title)}" width="700" height="923" fetchpriority="high" decoding="async">`
   : profile.photo
     ? `<img class="studio-portrait" src="${esc(profile.photo)}" alt="${esc(profile.name)}, ${esc(profile.title)}" width="346" height="346" fetchpriority="high" decoding="async">`
     : `<div class="graph-card" aria-hidden="true"><div class="gc-head"><span>Organic clicks</span><span class="badge badge-demo">Illustration</span></div>${heroFx(true, ["graph"])}</div>`}
