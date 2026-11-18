@@ -43,7 +43,7 @@ export const services = [
   {
     id: "technical", icon: '<path d="M9 7 4 12l5 5M15 7l5 5-5 5"/>', name: "Technical SEO and site migrations", outcome: "Make sure Google can find, crawl and trust every page that matters.",
     includes: ["Redirect mapping before and after a redesign", "Indexation clean-up and canonical fixes", "Structured data (schema) design and deployment", "Speed and Core Web Vitals checks"],
-    proof: { label: "See the migration case study", slug: "surgical-practice-site-rebuild" },
+    proof: { label: "See the domain migration case study", slug: "car-dealer-domain-migration" },
   },
   {
     id: "content", icon: '<path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6M9 8h3"/>', name: "Content and keyword strategy", outcome: "Write what your customers actually search for, and connect it to the pages that sell.",
@@ -58,7 +58,7 @@ export const services = [
   {
     id: "ai", icon: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 12h4"/>', name: "AI search visibility (AEO and GEO)", outcome: "Give Google AI Overviews, ChatGPT and Perplexity clear answers they can cite.",
     includes: ["Answer-ready content structure", "Entity and organisation structured data", "Trust signals for health, legal and finance topics", "AI visibility checks on your key questions"],
-    proof: { label: "See the healthcare case study", slug: "healthcare-ngo-organic-growth" },
+    proof: { label: "See the AI search case study", slug: "healthcare-ai-assistant-visibility" },
   },
   {
     id: "management", icon: '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>', name: "Ongoing SEO management", outcome: "A hands-on specialist who keeps shipping improvements every month.",
@@ -121,9 +121,12 @@ const PERIOD = "29 Jul to 26 Oct 2026 compared with 29 Jul to 26 Oct 2025";
 // Period-over-period windows (equal length, back to back), so results are not only year on year.
 const P3M = "29 Jul to 26 Oct 2026 compared with 30 Apr to 28 Jul 2026";
 const P6M = "28 Apr to 26 Oct 2026 compared with 28 Oct 2025 to 27 Apr 2026";
+const G28 = "20 Oct to 16 Nov 2026 compared with 6 Aug to 2 Sep 2026, the first 28 days tracked";
+const H90GSC = "19 Aug to 16 Nov 2026 compared with 21 May to 18 Aug 2026";
+const H90GA = "20 Aug to 17 Nov 2026 compared with 21 May to 18 Aug 2026";
 const P60D = "28 Aug to 26 Oct 2026 compared with 29 Jun to 27 Aug 2026";
 // Comparison labels shown beside each metric.
-export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began" };
+export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began", t28: "Last 28 days vs first 28 days tracked" };
 
 export const caseStudies = [
   {
@@ -358,6 +361,86 @@ export const caseStudies = [
       "This portfolio does not document which recommendations the store implemented, so the gains cannot be tied to specific changes.",
       "The AI features report starts on 18 May 2026. Two full 60-day windows are compared because a 3-month comparison would include only about 70 days of AI data in the earlier window and overstate the growth. Google reports impressions only for this view.",
       "Total impressions were roughly level (1.1m to 1.05m). GSC totals above 1,000 are rounded. No GA4 access for this store.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
+  {
+    slug: "car-dealer-domain-migration",
+    label: "Case G",
+    title: "Growing a car dealership's new domain after a rebrand",
+    client: "Authorised car dealership, Karachi (WordPress, Elementor)",
+    industry: "Automotive",
+    market: "Pakistan",
+    tags: ["Automotive", "Technical SEO", "Site migration", "Schema", "Internal linking", "AEO and GEO"],
+    summary:
+      "A dealership moved its website to a new domain after a brand change. Comparing the latest 28 days with the first 28 days of tracking on the new domain, Google clicks rose 150%, average position improved from 13.8 to 8.6, and impressions in Google's AI features grew almost fivefold.",
+    challenge:
+      "The 301 redirects from the old domain worked, but the site still pointed at the old domain from inside: 1,021 references at audit, including every blog post and the footer model menu. There was no dealership structured data, no price, booking or test-drive pages, and a duplicate price post was competing with the main price page. The audit also found hidden spam links injected into the theme, which were reported for the developer to remove.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I ran the migration, local and AI search audit and carried out the on-site SEO fixes below. Blog content was written by the agency content team.",
+    actions: [
+      { date: "18 Aug 2026", text: "Full migration, local SEO and AEO/GEO audit of all 86 sitemap URLs: redirects passed, but internal links, schema, commercial pages and image alt text failed. Delivered a prioritised fix list." },
+      { date: "20 Aug 2026", text: "Replaced 274 old-domain links across all 69 blog posts and verified each post through the API and a live crawl. Corrected author profile URLs and added the brand's social profiles to the organisation data." },
+      { date: "20 Aug 2026", text: "Designed and deployed AutoDealer structured data site-wide: both branches, the brands sold and contact details, linked to the existing organisation node so nothing is duplicated. Opening hours were left out because no verified source existed." },
+      { date: "8 Sep 2026", text: "Added 25 contextual internal links to four price, financing and model posts that had none." },
+      { date: "16 Sep 2026", text: "Merged a duplicate price-list post into the main price page, kept its unique comparison content, repointed the internal link and set a 301." },
+      { date: "24 Sep 2026", text: "Wrote alt text for 76 model images after viewing each one, replacing file-name text with real descriptions." },
+      { date: "2 Oct 2026", text: "Built the next blog plan from Semrush Pakistan data: rival comparisons and 7-seater searches the site could realistically win, skipping national price terms owned by large classifieds sites." },
+    ],
+    metrics: [
+      { name: "Google Search clicks", before: "262", after: "655", change: "+150%", source: "GSC Performance (web)", period: G28, type: "t28" },
+      { name: "Google Search impressions", before: "19.6k", after: "67.2k", change: "+243%", source: "GSC Performance (web)", period: G28, type: "t28" },
+      { name: "Average position", before: "13.8", after: "8.6", change: "5.2 places better", source: "GSC Performance (web)", period: G28, type: "t28" },
+      { name: "AI features impressions", before: "1.36k", after: "6.46k", change: "+375%", source: "GSC Generative AI features", period: G28, type: "t28" },
+    ],
+    evidence: [
+      { file: "case-g_gsc_performance_last28-vs-first28_2026-10-20_2026-11-16", platform: "Google Search Console", report: "Performance, custom compare", period: G28, caption: "Clicks 655 vs 262, impressions 67.2k vs 19.6k, average position 8.6 vs 13.8. CTR 1% vs 1.3%." },
+      { file: "case-g_gsc_ai-features_last28-vs-first28_2026-10-20_2026-11-16", platform: "Google Search Console", report: "Generative AI features (beta), custom compare", period: G28, caption: "Impressions in Google's AI features 6.46k vs 1.36k on two 28-day windows." },
+      { file: "case-g_gsc_ai-features_trend_since-2026-08-06", platform: "Google Search Console", report: "Generative AI features (beta), full history", period: "6 Aug to 16 Nov 2026", caption: "Daily AI features impressions on the new domain, from under 50 a day in August to about 250 a day in November." },
+    ],
+    limitations: [
+      "Search Console data for the new domain starts on 6 Aug 2026, so there is no year-on-year view and no pre-migration baseline. The old domain's Search Console data was not available to me.",
+      "Some of the early growth is the new domain picking up signals from the old one through the 301 redirects, which happens after any migration. The results show the combined outcome, not the effect of one fix.",
+      "CTR fell from 1.3% to 1%, as impressions grew faster than clicks. Google reports impressions only for AI features.",
+      "GSC totals above 1,000 are shown rounded. No GA4 access for this site, so no visit or lead figures are claimed.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
+  {
+    slug: "healthcare-ai-assistant-visibility",
+    label: "Case H",
+    title: "Doubling visits from AI assistants for a healthcare non-profit",
+    client: "Healthcare non-profit, Pakistan (same client as Case A, AI search view)",
+    industry: "Healthcare (YMYL)",
+    market: "Pakistan",
+    tags: ["Healthcare", "AEO and GEO", "Schema", "Internal linking"],
+    summary:
+      "The AI search side of Case A. Over the last 90 days against the 90 before, visits from AI assistants nearly doubled in GA4 (94 to 183 sessions), engaged AI visits rose 133%, and the site's impressions in Google's AI features grew 14% to 426k.",
+    challenge:
+      "Health questions are where AI Overviews and assistants such as ChatGPT answer most often, and they only cite sources they can understand and trust. The site had useful answers spread across its blog, but nothing told search engines or AI systems who the organisation was, what services each branch offered, or which test page answered which question.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I owned the AEO and GEO audit, the structured data and the internal linking. Content was written by the agency content team.",
+    actions: [
+      { date: "Jun 2026", text: "AEO and GEO audit: checked which health questions the site already answered, how clearly each answer could be quoted, and what entity information was missing." },
+      { date: "24 Jun 2026", text: "Deployed site-wide JSON-LD describing the organisation as a medical non-profit, its blood bank, laboratory and clinic services, every branch, and FAQ markup only where the FAQs are visible on the page." },
+      { date: "20 Aug 2026", text: "Linked 45 blog answers to the exact lab test pages they discuss (84 links), so a reader or an AI system can move from a question to the specific test and its price page." },
+      { date: "12 Oct 2026", text: "Linked four new posts into the same structure with 47 hyperlink-only links, leaving the copy itself unchanged." },
+    ],
+    metrics: [
+      { name: "AI Assistant sessions", before: "94", after: "183", change: "+94.7%", source: "GA4 Traffic acquisition, AI Assistant channel", period: H90GA, type: "m3" },
+      { name: "Engaged AI Assistant sessions", before: "55", after: "128", change: "+132.7%", source: "GA4 Traffic acquisition, AI Assistant channel", period: H90GA, type: "m3" },
+      { name: "AI Assistant engagement rate", before: "58.5%", after: "70.0%", change: "+11.4 points", source: "GA4 Traffic acquisition, AI Assistant channel", period: H90GA, type: "m3" },
+      { name: "AI features impressions", before: "374k", after: "426k", change: "+13.9%", source: "GSC Generative AI features", period: H90GSC, type: "m3" },
+    ],
+    evidence: [
+      { file: "case-h_ga4_ai-assistant-channel_90d-vs-prev-90d_2026-08-20_2026-11-17", platform: "GA4", report: "Traffic acquisition, AI Assistant channel, last 90 days vs previous 90", period: H90GA, caption: "AI Assistant sessions 183 vs 94 (+94.68%), engaged sessions 128 vs 55 (+132.73%), engagement rate 69.95% vs 58.51%." },
+      { file: "case-h_gsc_ai-features_3m-vs-prev-3m_2026-08-19_2026-11-16", platform: "Google Search Console", report: "Generative AI features (beta), custom compare", period: H90GSC, caption: "Impressions in Google's AI features 426k vs 374k. The current period (solid line) ran well ahead in its first half and slightly behind in its second." },
+    ],
+    limitations: [
+      "The numbers are small: 183 AI assistant visits is 0.7% of all sessions in the period. The case shows a direction, not a major traffic source yet.",
+      "GA4's AI Assistant channel only counts visits where the assistant passed a referrer. Many AI answers send no click at all, so real AI exposure is higher than GA4 shows.",
+      "Daily AI features impressions peaked in mid-August and have eased since. The 13.9% gain comes mostly from the first half of the window.",
+      "No GA4 key events are configured on this property, so no conversion claim is made. Google reports impressions only for AI features.",
       "Client name withheld pending publication approval.",
     ],
   },
