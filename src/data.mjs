@@ -114,7 +114,7 @@ export const verified = [
   { value: "+107.8%", label: "Organic Search sessions", detail: "GA4, Case A, 9,181 to 19,074", source: "Year on year: 29 Jul to 26 Oct 2026 vs the same days in 2025", caseSlug: "healthcare-ngo-organic-growth" },
   { value: "+69.2%", label: "Google Search clicks", detail: "GSC, Case E, 26.3k to 44.5k", source: "Last 6 months vs previous 6: 28 Apr to 26 Oct 2026 vs 28 Oct 2025 to 27 Apr 2026", caseSlug: "nonprofit-skills-training-growth" },
   { value: "+27.0%", label: "Organic Search sessions", detail: "GA4, Case A, 15,014 to 19,074", source: "Last 3 months vs previous 3: 29 Jul to 26 Oct vs 30 Apr to 28 Jul 2026", caseSlug: "healthcare-ngo-organic-growth" },
-  { value: "+55.2%", label: "AI features impressions", detail: "GSC, Case F, 69.6k to 108k", source: "Last 60 days vs previous 60: 28 Aug to 26 Oct vs 29 Jun to 27 Aug 2026", caseSlug: "uk-furniture-ai-search-visibility" },
+  { value: "+67.3%", label: "AI features impressions", detail: "GSC, Case F, 104k to 174k", source: "Last 3 months vs previous 3: 19 Aug to 16 Nov vs 21 May to 18 Aug 2026", caseSlug: "uk-furniture-ai-search-visibility" },
 ];
 
 const PERIOD = "29 Jul to 26 Oct 2026 compared with 29 Jul to 26 Oct 2025";
@@ -124,6 +124,7 @@ const P6M = "28 Apr to 26 Oct 2026 compared with 28 Oct 2025 to 27 Apr 2026";
 const G28 = "20 Oct to 16 Nov 2026 compared with 6 Aug to 2 Sep 2026, the first 28 days tracked";
 const H90GSC = "19 Aug to 16 Nov 2026 compared with 21 May to 18 Aug 2026";
 const H90GA = "20 Aug to 17 Nov 2026 compared with 21 May to 18 Aug 2026";
+const F3M = "19 Aug to 16 Nov 2026 compared with 21 May to 18 Aug 2026";
 const P60D = "28 Aug to 26 Oct 2026 compared with 29 Jun to 27 Aug 2026";
 // Comparison labels shown beside each metric.
 export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began", t28: "Last 28 days vs first 28 days tracked" };
@@ -337,7 +338,7 @@ export const caseStudies = [
     market: "United Kingdom",
     tags: ["E-commerce", "AEO and GEO", "Technical SEO", "Content strategy"],
     summary:
-      "A luxury bespoke furniture store that was blocking AI crawlers. Over the last three months, clicks rose 15% and average position improved from 15 to 11.8 against the three months before, and impressions in Google's AI features grew 55% over the last 60 days.",
+      "A luxury bespoke furniture store that was blocking AI crawlers. Over the last three months, clicks rose 40% and average position improved from 14.8 to 11.1 against the three months before, and impressions in Google's AI features grew 67% to 174k.",
     challenge:
       "The audit found the site's robots.txt opted out of AI crawlers (including Google-Extended, GPTBot and ClaudeBot) and blocked SEO tools, while a firewall refused non-browser crawlers. The blog had many posts but no plan for which to rewrite and which were simply losing clicks to AI answers.",
     role:
@@ -347,20 +348,22 @@ export const caseStudies = [
       { date: "Aug 2026", text: "Analysed the blog in Search Console to separate posts that need a rewrite from posts losing clicks to AI Overviews, and delivered a prioritised rewrite list." },
     ],
     metrics: [
-      { name: "Google Search clicks", before: "5.47k", after: "6.27k", change: "+14.6%", source: "GSC Performance (web)", period: P3M, type: "m3" },
-      { name: "Average position", before: "15", after: "11.8", change: "3.2 places better", source: "GSC Performance (web)", period: P3M, type: "m3" },
-      { name: "AI features impressions", before: "69.6k", after: "108k", change: "+55.2%", source: "GSC Generative AI features", period: P60D, type: "d60" },
+      { name: "Google Search clicks", before: "5.28k", after: "7.39k", change: "+40%", source: "GSC Performance (web)", period: F3M, type: "m3" },
+      { name: "Average position", before: "14.8", after: "11.1", change: "3.7 places better", source: "GSC Performance (web)", period: F3M, type: "m3" },
+      { name: "Average CTR", before: "0.5%", after: "0.7%", change: "+0.2 points", source: "GSC Performance (web)", period: F3M, type: "m3" },
+      { name: "AI features impressions", before: "104k", after: "174k", change: "+67.3%", source: "GSC Generative AI features", period: F3M, type: "m3" },
     ],
     evidence: [
-      { file: "case-f_gsc_performance_3m-vs-prev-3m_2026-07-29_2026-10-26", platform: "Google Search Console", report: "Performance, last 3 months vs previous 3", period: P3M, caption: "Clicks 6.27k vs 5.47k, CTR 0.6% vs 0.5%, average position 11.8 vs 15. Impressions 1.05m vs 1.1m." },
-      { file: "case-f_gsc_ai-features_trend_since-2026-05-18", platform: "Google Search Console", report: "Generative AI features (beta), full history", period: "18 May to 26 Oct 2026", caption: "Daily impressions in Google's AI features, rising from under 1k to about 3k a day since late September." },
-      { file: "case-f_gsc_ai-features_60d-vs-prev-60d_2026-08-28_2026-10-26", platform: "Google Search Console", report: "Generative AI features, 60 days vs previous 60", period: P60D, caption: "AI features impressions 108k vs 69.6k on two complete 60-day windows." },
+      { file: "case-f_gsc_performance_3m-vs-prev-3m_2026-08-19_2026-11-16", platform: "Google Search Console", report: "Performance, custom compare", period: F3M, caption: "Clicks 7.39k vs 5.28k, average position 11.1 vs 14.8, CTR 0.7% vs 0.5%. Impressions 1.08m vs 1.05m. Note the click spike in early November." },
+      { file: "case-f_gsc_ai-features_3m-vs-prev-3m_2026-08-19_2026-11-16", platform: "Google Search Console", report: "Generative AI features (beta), custom compare", period: F3M, caption: "Impressions in Google's AI features 174k vs 104k. The current period (solid line) pulls away from mid-September onward." },
+      { file: "case-f_gsc_ai-features_trend_since-2026-05-18_to_2026-11-16", platform: "Google Search Console", report: "Generative AI features (beta), full history", period: "18 May to 16 Nov 2026", caption: "Daily AI features impressions, from about 1k a day through the summer to about 3k a day from October." },
     ],
     limitations: [
-      "Over six months the picture is weaker: clicks fell from 18.4k to 11.9k against the six months before, so the recent three months are a recovery after that decline.",
+      "The click total includes a spike from 30 Oct to 8 Nov: 1.66k clicks in those ten days, roughly 1k more than a normal ten days for this site, spread across sofa and living-room queries. Without it the three-month gain would be closer to 20%.",
+      "Over six months the picture is weaker: clicks were 13k against 17.3k in the six months before, although average position improved from 14.8 to 13. The recent three months are a recovery after that decline.",
       "This portfolio does not document which recommendations the store implemented, so the gains cannot be tied to specific changes.",
-      "The AI features report starts on 18 May 2026. Two full 60-day windows are compared because a 3-month comparison would include only about 70 days of AI data in the earlier window and overstate the growth. Google reports impressions only for this view.",
-      "Total impressions were roughly level (1.1m to 1.05m). GSC totals above 1,000 are rounded. No GA4 access for this store.",
+      "The AI features report starts on 18 May 2026. Both windows compared here fall fully inside it. Google reports impressions only for this view.",
+      "Total impressions were roughly level (1.05m to 1.08m). GSC totals above 1,000 are rounded. No GA4 access for this store.",
       "Client name withheld pending publication approval.",
     ],
   },
