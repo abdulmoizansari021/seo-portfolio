@@ -125,9 +125,11 @@ const G28 = "20 Oct to 16 Nov 2026 compared with 6 Aug to 2 Sep 2026, the first 
 const H90GSC = "19 Aug to 16 Nov 2026 compared with 21 May to 18 Aug 2026";
 const H90GA = "20 Aug to 17 Nov 2026 compared with 21 May to 18 Aug 2026";
 const F3M = "19 Aug to 16 Nov 2026 compared with 21 May to 18 Aug 2026";
+const I8W = "22 Sep to 16 Nov 2026 compared with 28 Jul to 21 Sep 2026";
+const I28 = "20 Oct to 16 Nov 2026 compared with 22 Sep to 19 Oct 2026";
 const P60D = "28 Aug to 26 Oct 2026 compared with 29 Jun to 27 Aug 2026";
 // Comparison labels shown beside each metric.
-export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began", t28: "Last 28 days vs first 28 days tracked" };
+export const COMPARE = { yoy: "Year on year", m3: "Last 3 months vs previous 3", m6: "Last 6 months vs previous 6", d60: "Last 60 days vs previous 60", since: "Since the report began", t28: "Last 28 days vs first 28 days tracked", w8: "Last 8 weeks vs previous 8", d28: "Last 28 days vs previous 28" };
 
 export const caseStudies = [
   {
@@ -444,6 +446,41 @@ export const caseStudies = [
       "GA4's AI Assistant channel only counts visits where the assistant passed a referrer. Many AI answers send no click at all, so real AI exposure is higher than GA4 shows.",
       "Daily AI features impressions peaked in mid-August and have eased since. The 13.9% gain comes mostly from the first half of the window.",
       "No GA4 key events are configured on this property, so no conversion claim is made. Google reports impressions only for AI features.",
+      "Client name withheld pending publication approval.",
+    ],
+  },
+  {
+    slug: "print-shop-ai-overview-recovery",
+    label: "Case I",
+    title: "Winning back AI Overview visibility for a New York print shop",
+    client: "Commercial printing and signage company, New York City (WordPress)",
+    industry: "Printing and local services",
+    market: "United States",
+    tags: ["Local services", "AEO and GEO", "Schema", "Internal linking"],
+    summary:
+      "An AI Overview case. After a sharp drop in July, the site's impressions in Google's AI features rose 84% over the last eight weeks against the eight weeks before, and the latest 28 days were 85% higher than the 28 days before them.",
+    challenge:
+      "The shop's traffic comes mostly from how-to guides on paper, print sizes and finishing, exactly the questions Google now answers with AI Overviews. In mid-July its AI features impressions fell from roughly 1,000 a day to about 250. At the same time, 12 service pages shared one wrong meta description, more than 100 images had no alt text, there was no local business structured data, and nearly every blog link to a service page went through a redirect.",
+    role:
+      "Senior SEO Specialist at Digital Eggheads. I ran the audits and made the on-site changes below myself in WordPress.",
+    actions: [
+      { date: "31 Jul 2026", text: "Crawled all 159 URLs. Wrote 20 unique meta descriptions for service pages that shared one wrong description or had none, and set descriptive alt text on 104 images after viewing each one." },
+      { date: "31 Aug 2026", text: "Designed and deployed LocalBusiness and Service structured data on the homepage and 16 commercial pages, without duplicating the organisation data the SEO plugin already outputs. Verified live: one business entity per page, zero parse errors." },
+      { date: "9 Sep 2026", text: "Rebuilt blog-to-service linking: 138 direct links to service pages (up from 39, almost all of which went through redirects), plus 40 links between related guides and 13 from service pages back to guides. No internal link now hits a redirect." },
+    ],
+    metrics: [
+      { name: "AI features impressions", before: "15k", after: "27.6k", change: "+84%", source: "GSC Generative AI features", period: I8W, type: "w8" },
+      { name: "AI features impressions", before: "9.68k", after: "17.9k", change: "+85%", source: "GSC Generative AI features", period: I28, type: "d28" },
+    ],
+    evidence: [
+      { file: "case-i_gsc_ai-features_8w-vs-prev-8w_2026-09-22_2026-11-16", platform: "Google Search Console", report: "Generative AI features (beta), custom compare", period: I8W, caption: "AI features impressions 27.6k vs 15k. The two periods run level for about three weeks, then the current period (solid line) pulls ahead from mid-October." },
+      { file: "case-i_gsc_ai-features_trend_since-2026-05-18", platform: "Google Search Console", report: "Generative AI features (beta), full history", period: "18 May to 16 Nov 2026", caption: "The full picture: about 1,000 a day until mid-July, a drop to about 250 a day, and a climb back to about 600 a day from October." },
+    ],
+    limitations: [
+      "This is a partial recovery. Daily AI features impressions are still below their May to July level, and the cause of the July drop has not been isolated.",
+      "Most of the gain comes from one guide on poster sizes (about 300 to 8,300 AI impressions across the two eight-week windows). Several other guides grew too, but the total depends heavily on that one page.",
+      "Google reports impressions only for AI features, not clicks, so this shows visibility in AI answers, not visits. Total Google clicks were about level over the same windows (342 vs 315).",
+      "The changes were made between late July and early September, and the rise starts in October. The timing fits, but the gain cannot be tied to one specific change.",
       "Client name withheld pending publication approval.",
     ],
   },
