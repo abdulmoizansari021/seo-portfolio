@@ -4,7 +4,7 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { COMPARE, profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses, landings } from "../src/data.mjs";
+import { COMPARE, profile, enquiry, verified, caseStudies, services, audiences, industries, processSteps, promises, faq, skills, tools, experience, education, courses, credentialWallet, landings } from "../src/data.mjs";
 import { rootCss, assertContrast, fxVars } from "../src/theme.mjs";
 import { heroFx } from "./theme-fx.mjs";
 import { readFileSync } from "node:fs";
@@ -273,6 +273,7 @@ const personLd = {
   "@type": "Person", "@id": `${SITE}/#person`, name: profile.name, ...(profile.photo ? { image: `${SITE}${profile.photo}` } : {}), jobTitle: profile.title, email: `mailto:${profile.email}`, url: `${SITE}/`,
   address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
   worksFor: { "@type": "Organization", name: "Digital Eggheads" },
+  hasCredential: courses.filter((c) => c.credential).map((c) => ({ "@type": "EducationalOccupationalCredential", name: c.title, credentialCategory: "certification", url: c.link, recognizedBy: { "@type": "Organization", name: "Google" } })),
   knowsAbout: ["Search engine optimization", "Technical SEO", "Local SEO", "Structured data", "Answer engine optimization", "Generative engine optimization"],
   makesOffer: services.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s.name, description: s.outcome } })),
   sameAs: profile.links.map((l) => l.href),
@@ -437,7 +438,7 @@ ${skills.map((s, i) => `<div class="panel rv" style="--i:${i % 3}"><h3>${esc(s.g
 
 <section><div class="two">
 <div class="panel rv"><h3>Education</h3><ul>${education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)} (${esc(e.period)})</li>`).join("")}</ul></div>
-<div class="panel rv" style="--i:1"><h3>Courses</h3><ul>${courses.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}</li>`).join("")}</ul></div>
+<div class="panel rv" style="--i:1"><h3>Certifications and courses</h3><ul>${courses.map((e) => `<li>${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.title)}</a>` : esc(e.title)}, ${esc(e.org)}${e.date ? ` (${esc(e.date)})` : ""}${e.link ? " <small>Verified credential</small>" : ""}</li>`).join("")}</ul><p><a href="${esc(credentialWallet)}" target="_blank" rel="noopener">See all verified credentials</a></p></div>
 </div>
 <p style="margin-top:18px"><a href="${profile.cv}" download>Download my CV (PDF)</a></p></section>
 </div>

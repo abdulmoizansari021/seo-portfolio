@@ -534,7 +534,10 @@ export const education = [
   { title: "Intermediate, Commerce", org: "Board of Intermediate Karachi", period: "2015 to 2017" },
 ];
 
+// All verifiable credentials, issued through Accredible.
+export const credentialWallet = "https://www.credential.net/profile/abdulmoiz470265/wallet";
 export const courses = [
+  { title: "Google Analytics Certification (2026)", org: "Google Skillshop", date: "Nov 2026", link: "https://skillshop.credential.net/369671f2-bf5f-4287-a9f0-e87afc54c120", credential: true },
   { title: "Digital Marketing (2 months)", org: "Rangoonwala Community Centre" },
   { title: "Advanced Google Analytics", org: "Google Analytics for Business" },
   { title: "Content Marketing and SEO Fundamentals", org: "Semrush" },
